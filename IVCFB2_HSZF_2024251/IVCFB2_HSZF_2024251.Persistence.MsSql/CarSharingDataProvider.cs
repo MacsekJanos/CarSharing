@@ -88,18 +88,22 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
 
         public IEnumerable<string> Top10MostPayingCustomer()
         {
-            var mostPayingCustomers = context.Trips.GroupBy(t => t.CustomerId).
-               Select(g => new
-               {
-                   CustomerId = g.Key,
-                   TotalPaid = g.Sum(t => t.Cost),
-               }).OrderByDescending(g => g.TotalPaid).
-               Take(10).ToList();
+            var mostPayingCustomers = context.Trips
+                .GroupBy(t => t.CustomerId)
+                .Select(g => new
+                {
+                    CustomerId = g.Key,
+                    TotalPaid = g.Sum(t => t.Cost),
+                })
+                .OrderByDescending(g => g.TotalPaid)
+                .Take(10);
 
-            return context.Customers.Where(c => mostPayingCustomers
-                .Select(c => c.CustomerId).ToList().Contains(c.Id))
+            return context.Customers
+                .Where(c => mostPayingCustomers.Select(m => m.CustomerId).Contains(c.Id))
                 .Select(c => c.Name)
                 .ToList();
+
+
         }
 
         public double AvgDistance()

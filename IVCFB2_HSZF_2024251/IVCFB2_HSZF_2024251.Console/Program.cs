@@ -28,11 +28,13 @@ namespace IVCFB2_HSZF_2024251
             carSharingServie.DbWipe();
             carSharingServie.DbSeed();
 
-            //foreach (var item in carSharingServie.Top10MostPayingCustomer())
-            //{
-            //    Console.WriteLine(item);
-            //};
+            foreach (var item in carSharingServie.Top10MostPayingCustomer())
+            {
+                Console.WriteLine(item);
+            }
+            Console.WriteLine("\n");
 
+            Console.WriteLine(carSharingServie.MostUsedCar());
         }
     }
 }
