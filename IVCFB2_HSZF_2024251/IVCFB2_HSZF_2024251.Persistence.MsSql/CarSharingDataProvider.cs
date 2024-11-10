@@ -1,4 +1,6 @@
 ﻿using IVCFB2_HSZF_2024251.Model;
+using System.Globalization;
+using System.Xml;
 
 namespace IVCFB2_HSZF_2024251.Persistence.MsSql
 {
@@ -19,7 +21,84 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
         }
         public void DbSeed(string? path = null)
         {
+            if (string.IsNullOrEmpty(path))
+            {
+                path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "carsharing.xml");
+            }
 
+            if (!File.Exists(path))
+            {
+                Console.WriteLine("File not found: " + path);
+                return;
+            }
+
+            var xmlDoc = new XmlDocument();
+            xmlDoc.Load(path);
+
+            var cars = xmlDoc.SelectNodes("//CarSharing/Cars/Car");
+            if (cars != null)
+            {
+                foreach (XmlNode carNode in cars)
+                {
+                    if (carNode["Model"] != null && carNode["TotalDistance"] != null && carNode["DistanceSinceLastMaintenance"] != null)
+                    {
+                        var car = new Car
+                        {
+                            Model = carNode["Model"].InnerText,
+                            TotalDistance = double.Parse(carNode["TotalDistance"].InnerText, CultureInfo.InvariantCulture),
+                            DistanceSinceLastMaintenance = double.Parse(carNode["DistanceSinceLastMaintenance"].InnerText, CultureInfo.InvariantCulture)
+                        };
+                        context.Cars.Add(car);
+                    }
+                }
+            }
+
+            var customers = xmlDoc.SelectNodes("//CarSharing/Customers/Customer");
+            if (customers != null)
+            {
+                foreach (XmlNode customerNode in customers)
+                {
+                    if (customerNode["Name"] != null && customerNode["Balance"] != null)
+                    {
+                        var customer = new Customer
+                        {
+                            Name = customerNode["Name"].InnerText,
+                            Balance = double.Parse(customerNode["Balance"].InnerText, CultureInfo.InvariantCulture)
+                        };
+                        context.Customers.Add(customer);
+                    }
+                }
+            }
+
+            context.SaveChanges();
+
+            var trips = xmlDoc.SelectNodes("//CarSharing/Trips/Trip");
+            if (trips != null)
+            {
+                foreach (XmlNode tripNode in trips)
+                {
+                    if (tripNode["CarId"] != null && tripNode["CustomerId"] != null && tripNode["Distance"] != null && tripNode["Cost"] != null)
+                    {
+                        int carId = int.Parse(tripNode["CarId"].InnerText);
+                        int customerId = int.Parse(tripNode["CustomerId"].InnerText);
+
+                        // Check if CarId and CustomerId exist
+                        if (context.Cars.Any(c => c.Id == carId) && context.Customers.Any(c => c.Id == customerId))
+                        {
+                            var trip = new Trip
+                            {
+                                CarId = carId,
+                                CustomerId = customerId,
+                                Distance = double.Parse(tripNode["Distance"].InnerText, CultureInfo.InvariantCulture),
+                                Cost = double.Parse(tripNode["Cost"].InnerText, CultureInfo.InvariantCulture)
+                            };
+                            context.Trips.Add(trip);
+                        }
+                    }
+                }
+            }
+
+            context.SaveChanges();
         }
         public IEnumerable<Car> GetAllCars()
         {
