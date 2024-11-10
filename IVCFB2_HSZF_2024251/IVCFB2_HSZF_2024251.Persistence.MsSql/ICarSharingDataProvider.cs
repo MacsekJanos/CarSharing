@@ -2,6 +2,7 @@
 {
     public interface ICarSharingDataProvider : ICarDataProvider, ICustomerDataProvider, ITripDataProvider
     {
-
+        void DbWipe();
+        void DbSeed(string? path = null);
     }
 }

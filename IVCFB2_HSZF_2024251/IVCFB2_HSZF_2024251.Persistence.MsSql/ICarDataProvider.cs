@@ -9,5 +9,8 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
         void AddCar(Car car);
         void UpdateCar(Car car);
         void DeleteCar(int id);
+
+        void DeleteCars(int[] ids);
+        void DeleteAllCar();
     }
 }

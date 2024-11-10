@@ -25,7 +25,7 @@ namespace IVCFB2_HSZF_2024251
             var carSharingServie = host.Services.GetService<ICarSharingService>();
 
             Car car = carSharingServie.GetCarById(1);
-            //Legyél jó pls;
+            carSharingServie.DbSeed();
         }
     }
 }

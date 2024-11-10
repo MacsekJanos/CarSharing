@@ -12,6 +12,16 @@ namespace IVCFB2_HSZF_2024251.Application
             this.dataProvider = dataProvider;
         }
 
+        public void DbWipe()
+        {
+            dataProvider.DbWipe();
+        }
+
+        public void DbSeed(string? path = null)
+        {
+            dataProvider.DbSeed();
+        }
+
         public IEnumerable<Car> GetAllCars()
         {
             return dataProvider.GetAllCars();
@@ -35,6 +45,15 @@ namespace IVCFB2_HSZF_2024251.Application
         public void DeleteCar(int id)
         {
             dataProvider.DeleteCar(id);
+        }
+
+        public void DeleteCars(int[] ids)
+        {
+            dataProvider.DeleteCars(ids);
+        }
+        public void DeleteAllCar()
+        {
+            dataProvider.DeleteAllCar();
         }
 
         public IEnumerable<Customer> GetAllCustomers()
@@ -62,6 +81,15 @@ namespace IVCFB2_HSZF_2024251.Application
             dataProvider.DeleteCustomer(id);
         }
 
+        public void DeleteCustomers(int[] ids)
+        {
+            dataProvider.DeleteCustomers(ids);
+        }
+
+        public void DeleteAllCustomer()
+        {
+            dataProvider.DeleteAllCustomer();
+        }
         public IEnumerable<Trip> GetAllTrips()
         {
             return dataProvider.GetAllTrips();
@@ -85,6 +113,16 @@ namespace IVCFB2_HSZF_2024251.Application
         public void DeleteTrip(int id)
         {
             dataProvider.DeleteTrip(id);
+        }
+
+        public void DeleteTrips(int[] ids)
+        {
+            dataProvider.DeleteTrips(ids);
+        }
+
+        public void DeleteAllTrip()
+        {
+            dataProvider.DeleteAllTrip();
         }
     }
 }

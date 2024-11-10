@@ -9,5 +9,8 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
         void AddCustomer(Customer customer);
         void UpdateCustomer(Customer customer);
         void DeleteCustomer(int id);
+
+        void DeleteCustomers(int[] ids);
+        void DeleteAllCustomer();
     }
 }
