@@ -1,6 +1,7 @@
 ﻿using IVCFB2_HSZF_2024251.Model;
+using Microsoft.EntityFrameworkCore;
 using System.Globalization;
-using System.Xml;
+using System.Xml.Linq;
 
 namespace IVCFB2_HSZF_2024251.Persistence.MsSql
 {
@@ -18,6 +19,10 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
             context.Cars.RemoveRange(context.Cars);
             context.Customers.RemoveRange(context.Customers);
             context.SaveChanges();
+
+            context.Database.ExecuteSqlRaw("DBCC CHECKIDENT ('Trips', RESEED, 0);");
+            context.Database.ExecuteSqlRaw("DBCC CHECKIDENT ('Cars', RESEED, 0);");
+            context.Database.ExecuteSqlRaw("DBCC CHECKIDENT ('Customers', RESEED, 0);");
         }
         public void DbSeed(string? path = null)
         {
@@ -32,73 +37,40 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
                 return;
             }
 
-            var xmlDoc = new XmlDocument();
-            xmlDoc.Load(path);
+            var xdoc = XDocument.Load(path);
 
-            var cars = xmlDoc.SelectNodes("//CarSharing/Cars/Car");
-            if (cars != null)
+            foreach (var item in xdoc.Descendants("Car"))
             {
-                foreach (XmlNode carNode in cars)
+                context.Cars.Add(new Car
                 {
-                    if (carNode["Model"] != null && carNode["TotalDistance"] != null && carNode["DistanceSinceLastMaintenance"] != null)
-                    {
-                        var car = new Car
-                        {
-                            Model = carNode["Model"].InnerText,
-                            TotalDistance = double.Parse(carNode["TotalDistance"].InnerText, CultureInfo.InvariantCulture),
-                            DistanceSinceLastMaintenance = double.Parse(carNode["DistanceSinceLastMaintenance"].InnerText, CultureInfo.InvariantCulture)
-                        };
-                        context.Cars.Add(car);
-                    }
-                }
+                    Model = item.Element("Model").Value,
+                    TotalDistance = Double.Parse(item.Element("TotalDistance").Value, CultureInfo.InvariantCulture),
+                    DistanceSinceLastMaintenance = Double.Parse(item.Element("DistanceSinceLastMaintenance").Value, CultureInfo.InvariantCulture),
+
+                });
+                context.SaveChanges();
             }
 
-            var customers = xmlDoc.SelectNodes("//CarSharing/Customers/Customer");
-            if (customers != null)
+            foreach (var item in xdoc.Descendants("Customer"))
             {
-                foreach (XmlNode customerNode in customers)
+                context.Customers.Add(new Customer
                 {
-                    if (customerNode["Name"] != null && customerNode["Balance"] != null)
-                    {
-                        var customer = new Customer
-                        {
-                            Name = customerNode["Name"].InnerText,
-                            Balance = double.Parse(customerNode["Balance"].InnerText, CultureInfo.InvariantCulture)
-                        };
-                        context.Customers.Add(customer);
-                    }
-                }
+                    Name = item.Element("Name").Value,
+                    Balance = Double.Parse(item.Element("Balance").Value, CultureInfo.InvariantCulture),
+                });
+                context.SaveChanges();
             }
-
-            context.SaveChanges();
-
-            var trips = xmlDoc.SelectNodes("//CarSharing/Trips/Trip");
-            if (trips != null)
+            foreach (var item in xdoc.Descendants("Trip"))
             {
-                foreach (XmlNode tripNode in trips)
+                context.Trips.Add(new Trip
                 {
-                    if (tripNode["CarId"] != null && tripNode["CustomerId"] != null && tripNode["Distance"] != null && tripNode["Cost"] != null)
-                    {
-                        int carId = int.Parse(tripNode["CarId"].InnerText);
-                        int customerId = int.Parse(tripNode["CustomerId"].InnerText);
-
-                        // Check if CarId and CustomerId exist
-                        if (context.Cars.Any(c => c.Id == carId) && context.Customers.Any(c => c.Id == customerId))
-                        {
-                            var trip = new Trip
-                            {
-                                CarId = carId,
-                                CustomerId = customerId,
-                                Distance = double.Parse(tripNode["Distance"].InnerText, CultureInfo.InvariantCulture),
-                                Cost = double.Parse(tripNode["Cost"].InnerText, CultureInfo.InvariantCulture)
-                            };
-                            context.Trips.Add(trip);
-                        }
-                    }
-                }
+                    CarId = int.Parse(item.Element("CarId").Value),
+                    CustomerId = int.Parse(item.Element("CustomerId").Value),
+                    Distance = Double.Parse(item.Element("Distance").Value, CultureInfo.InvariantCulture),
+                    Cost = Double.Parse(item.Element("Cost").Value, CultureInfo.InvariantCulture),
+                });
+                context.SaveChanges();
             }
-
-            context.SaveChanges();
         }
         public IEnumerable<Car> GetAllCars()
         {
