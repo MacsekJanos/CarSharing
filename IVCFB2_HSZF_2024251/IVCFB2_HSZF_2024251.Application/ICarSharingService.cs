@@ -7,8 +7,13 @@ namespace IVCFB2_HSZF_2024251.Application
 
         //DB
 
-        public void DbWipe();
-        public void DbSeed(string? path = null);
+        void DbWipe();
+        void DbSeed(string? path = null);
+        string MostUsedCar();
+        IEnumerable<string> Top10MostPayingCustomer();
+        double AvgDistance();
+
+
 
         //Cars
         IEnumerable<Car> GetAllCars();

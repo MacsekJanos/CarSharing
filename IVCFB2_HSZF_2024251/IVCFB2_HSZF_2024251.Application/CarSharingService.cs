@@ -22,6 +22,21 @@ namespace IVCFB2_HSZF_2024251.Application
             dataProvider.DbSeed();
         }
 
+        public string MostUsedCar()
+        {
+            return dataProvider.MostUsedCar();
+        }
+
+        public IEnumerable<string> Top10MostPayingCustomer()
+        {
+            return dataProvider.Top10MostPayingCustomer();
+        }
+
+        public double AvgDistance()
+        {
+            return dataProvider.AvgDistance();
+        }
+
         public IEnumerable<Car> GetAllCars()
         {
             return dataProvider.GetAllCars();

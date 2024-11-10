@@ -4,5 +4,9 @@
     {
         void DbWipe();
         void DbSeed(string? path = null);
+
+        string MostUsedCar();
+        IEnumerable<string> Top10MostPayingCustomer();
+        double AvgDistance();
     }
 }

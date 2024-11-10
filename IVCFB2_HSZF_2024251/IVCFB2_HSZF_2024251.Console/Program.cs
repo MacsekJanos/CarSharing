@@ -27,6 +27,12 @@ namespace IVCFB2_HSZF_2024251
             Car car = carSharingServie.GetCarById(1);
             carSharingServie.DbWipe();
             carSharingServie.DbSeed();
+
+            //foreach (var item in carSharingServie.Top10MostPayingCustomer())
+            //{
+            //    Console.WriteLine(item);
+            //};
+
         }
     }
 }

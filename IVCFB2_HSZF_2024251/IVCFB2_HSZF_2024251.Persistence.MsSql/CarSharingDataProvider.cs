@@ -13,6 +13,7 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
             this.context = context;
         }
 
+        //DB Actions
         public void DbWipe()
         {
             context.Trips.RemoveRange(context.Trips);
@@ -72,6 +73,41 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
                 context.SaveChanges();
             }
         }
+        public string MostUsedCar()
+        {
+            var mostUsedCar = context.Trips.GroupBy(t => t.CarId)
+                .OrderByDescending(g => g.Count()).
+                Select(g => new
+                {
+                    CarId = g.Key,
+                    Count = g.Count(),
+                }).FirstOrDefault();
+
+            return context.Cars.Where(c => c.Id == mostUsedCar.CarId).Select(c => c.Model).FirstOrDefault();
+        }
+
+        public IEnumerable<string> Top10MostPayingCustomer()
+        {
+            var mostPayingCustomers = context.Trips.GroupBy(t => t.CustomerId).
+               Select(g => new
+               {
+                   CustomerId = g.Key,
+                   TotalPaid = g.Sum(t => t.Cost),
+               }).OrderByDescending(g => g.TotalPaid).
+               Take(10).ToList();
+
+            return context.Customers.Where(c => mostPayingCustomers
+                .Select(c => c.CustomerId).ToList().Contains(c.Id))
+                .Select(c => c.Name)
+                .ToList();
+        }
+
+        public double AvgDistance()
+        {
+            return context.Cars.Average(c => c.TotalDistance);
+        }
+
+        //Car Actions
         public IEnumerable<Car> GetAllCars()
         {
             return context.Cars.ToList();
@@ -119,6 +155,8 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
             context.Cars.RemoveRange(context.Cars);
             context.SaveChanges();
         }
+
+        //CustomerActions
         public IEnumerable<Customer> GetAllCustomers()
         {
             return context.Customers.ToList();
@@ -165,6 +203,8 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
             context.Customers.RemoveRange(context.Customers);
             context.SaveChanges();
         }
+
+        //Trip Actions
         public IEnumerable<Trip> GetAllTrips()
         {
             return context.Trips.ToList();
