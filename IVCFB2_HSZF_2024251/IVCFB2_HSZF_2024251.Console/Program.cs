@@ -25,7 +25,7 @@ namespace IVCFB2_HSZF_2024251
             var carSharingServie = host.Services.GetService<ICarSharingService>();
 
             carSharingServie.DbWipe();
-            //carSharingServie.DbSeed();
+            carSharingServie.DbSeed();
 
             DisplayMenu(
             new string[]
@@ -49,7 +49,9 @@ namespace IVCFB2_HSZF_2024251
                     "Utazások listázása",
                 },
                 [
-
+                    () => carSharingServie.ToList(carSharingServie.GetAllCars()),
+                    () => carSharingServie.ToList(carSharingServie.GetAllCustomers()),
+                    () => carSharingServie.ToList(carSharingServie.GetAllTrips())
                 ]
                 ),
               () => DisplayMenu(
@@ -67,6 +69,7 @@ namespace IVCFB2_HSZF_2024251
                           "Autó módosítása",
                           "Autó törlése",
                           "Autók törlése",
+                          "Autók exportálása",
                           "Összes autó törlése",
                          },
                          [
@@ -80,6 +83,7 @@ namespace IVCFB2_HSZF_2024251
                           "Vásárló módosítása",
                           "Vásárló törlése",
                           "Vásárlók törlése",
+                          "Vásárlók exportálása",
                           "Összes vásárló törlése",
                          },
                          [
@@ -93,6 +97,7 @@ namespace IVCFB2_HSZF_2024251
                           "Utazás módosítása",
                           "Utazás törlése",
                           "Utazások törlése",
+                          "Utazások exportálása",
                           "Összes utazás törlése",
                          },
                          [
@@ -107,7 +112,7 @@ namespace IVCFB2_HSZF_2024251
                       },
                       [
                           () => carSharingServie.MostUsedCar(),
-                          () => carSharingServie.Top10MostPayingCustomer(),
+                          () => carSharingServie.Print(carSharingServie.Top10MostPayingCustomer()),
                           () => carSharingServie.AvgDistance(),
                       ]),
                       () => WipeDatabase(carSharingServie)

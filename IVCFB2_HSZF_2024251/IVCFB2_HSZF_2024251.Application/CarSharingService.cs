@@ -27,6 +27,16 @@ namespace IVCFB2_HSZF_2024251.Application
             dbEvent.OnActionCompleted("Az adatbázis sikeresen feltöltődött");
         }
 
+        public void Print<T>(IEnumerable<T> data)
+        {
+            dataProvider.Print(data);
+        }
+
+        public void ToList<T>(T data)
+        {
+            dataProvider.ToList<T>(data);
+        }
+
         public string MostUsedCar()
         {
             return dataProvider.MostUsedCar();

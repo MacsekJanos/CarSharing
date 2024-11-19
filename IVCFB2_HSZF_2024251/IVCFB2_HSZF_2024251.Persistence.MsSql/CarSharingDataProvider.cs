@@ -1,6 +1,7 @@
 ﻿using IVCFB2_HSZF_2024251.Model;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
+using System.Reflection;
 using System.Xml.Linq;
 
 namespace IVCFB2_HSZF_2024251.Persistence.MsSql
@@ -74,6 +75,41 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
 
             }
         }
+        public void Print<T>(IEnumerable<T> data)
+        {
+            int i = 1;
+            foreach (var item in data)
+            {
+                Console.WriteLine($"{i++}. {item?.ToString()}");
+            }
+        }
+        public void ToList<T>(T data)
+        {
+            if (data == null) return;
+
+            if (data is IEnumerable<object> enumerable)
+            {
+                foreach (var item in enumerable)
+                {
+                    ToList(item);
+                }
+            }
+            else
+            {
+                Type type = data.GetType();
+                PropertyInfo[] properties = type.GetProperties();
+
+                foreach (var property in properties)
+                {
+                    var value = property.GetValue(data);
+                    if (property.PropertyType.IsPrimitive || property.PropertyType == typeof(string) || property.Name.EndsWith("Id"))
+                    {
+                        Console.WriteLine($"{property.Name}: {value}");
+                    }
+                }
+                Console.WriteLine(new string('-', 20));
+            }
+        }
         public string MostUsedCar()
         {
             var mostUsedCar = context.Trips
@@ -86,7 +122,9 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
               .OrderByDescending(g => g.TotalDistance)
                .FirstOrDefault();
 
-            return context.Cars.Where(c => c.Id == mostUsedCar.CarId).Select(c => c.Model).FirstOrDefault();
+            Car result = context.Cars.Where(c => c.Id == mostUsedCar.CarId).FirstOrDefault();
+            Console.WriteLine("A legtöbbet futott kocsi: " + result);
+            return "";
         }
 
         public IEnumerable<string> Top10MostPayingCustomer()
@@ -101,6 +139,7 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
                 .OrderByDescending(g => g.TotalPaid)
                 .Take(10);
 
+            Console.WriteLine("\nA 10 legtöbbet fizető vásárló: \n");
             return context.Customers
                 .Where(c => mostPayingCustomers.Select(m => m.CustomerId).Contains(c.Id))
                 .Select(c => c.Name)
@@ -111,7 +150,9 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
 
         public double AvgDistance()
         {
-            return context.Cars.Average(c => c.TotalDistance);
+            var result = context.Cars.Average(c => c.TotalDistance);
+            Console.WriteLine("Az autók átlagos futása: " + result);
+            return result;
         }
 
         //Car Actions
