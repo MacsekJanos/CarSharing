@@ -7,9 +7,10 @@ namespace IVCFB2_HSZF_2024251
 {
     public class Program
     {
-
+        private static bool isDatabaseSeeded = false;
         private static void Main(string[] args)
         {
+
             var host = Host.CreateDefaultBuilder()
                 .ConfigureServices((hostContext, services) =>
                 {
@@ -23,11 +24,14 @@ namespace IVCFB2_HSZF_2024251
             using IServiceScope serviceScope = host.Services.CreateScope();
             var carSharingServie = host.Services.GetService<ICarSharingService>();
 
+            carSharingServie.DbWipe();
+            //carSharingServie.DbSeed();
+
             DisplayMenu(
             new string[]
             {
             "Bolvasás",
-            "Lekérdezések",
+            "Listás nézetek",
             "Adatbázis műveletek"
             },
             [
@@ -35,7 +39,7 @@ namespace IVCFB2_HSZF_2024251
                 "Adatok beolvasása xml-ből"
                 },
                 [
-                () => carSharingServie.DbSeed()
+                () => SeedDatabase(carSharingServie)
                 ]
                 ),
               () => DisplayMenu(new string[]
@@ -53,6 +57,7 @@ namespace IVCFB2_HSZF_2024251
                       "Autók",
                       "Vásárlók",
                       "Utazások",
+                      "Lekérdezések",
                       "Adatbázis törlése"
                   },
                   [
@@ -94,7 +99,18 @@ namespace IVCFB2_HSZF_2024251
 
                          ]
                           ),
-                      () => carSharingServie.DbWipe()
+                           () => DisplayMenu(new string[]
+                      {
+                          "Legtöbbet futott jármű",
+                          "Top 10 legtöbbet fizető ügyfél",
+                          "Autók átlagos futása",
+                      },
+                      [
+                          () => carSharingServie.MostUsedCar(),
+                          () => carSharingServie.Top10MostPayingCustomer(),
+                          () => carSharingServie.AvgDistance(),
+                      ]),
+                      () => WipeDatabase(carSharingServie)
                   ]
                )
             ]
@@ -142,6 +158,24 @@ namespace IVCFB2_HSZF_2024251
                 }
                 y = 5;
             }
+        }
+        static void SeedDatabase(ICarSharingService carSharingService)
+        {
+            if (isDatabaseSeeded)
+            {
+                Console.WriteLine("Az adatbázis már fel lett töltve.");
+            }
+            else
+            {
+                carSharingService.DbSeed();
+                isDatabaseSeeded = true;
+            }
+        }
+
+        static void WipeDatabase(ICarSharingService carSharingService)
+        {
+            carSharingService.DbWipe();
+            isDatabaseSeeded = false;
         }
     }
 }
