@@ -23,7 +23,6 @@ namespace IVCFB2_HSZF_2024251
             using IServiceScope serviceScope = host.Services.CreateScope();
             var carSharingServie = host.Services.GetService<ICarSharingService>();
 
-
             DisplayMenu(
             new string[]
             {
@@ -32,24 +31,72 @@ namespace IVCFB2_HSZF_2024251
             "Adatbázis műveletek"
             },
             [
-              () => DisplayMenu(
-                new string[]
-                {
+              () => DisplayMenu(new string[]{
                 "Adatok beolvasása xml-ből"
                 },
                 [
                 () => carSharingServie.DbSeed()
                 ]
                 ),
-              () => Console.WriteLine("semmi nincs még itt"),
+              () => DisplayMenu(new string[]
+                {
+                    "Autók listázása",
+                    "Vásárlók listázása",
+                    "Utazások listázása",
+                },
+                [
+
+                ]
+                ),
               () => DisplayMenu(
                   new string[]{
+                      "Autók",
+                      "Vásárlók",
+                      "Utazások",
                       "Adatbázis törlése"
                   },
                   [
+                      () => DisplayMenu(new string[]
+                         {
+                          "Új autó felvétele",
+                          "Autó módosítása",
+                          "Autó törlése",
+                          "Autók törlése",
+                          "Összes autó törlése",
+                         },
+                         [
+
+                         ]
+                          ),
+
+                      () => DisplayMenu(new string[]
+                         {
+                          "Új vásárló felvétele",
+                          "Vásárló módosítása",
+                          "Vásárló törlése",
+                          "Vásárlók törlése",
+                          "Összes vásárló törlése",
+                         },
+                         [
+
+                         ]
+                          ),
+
+                      () => DisplayMenu(new string[]
+                         {
+                          "Új utazás",
+                          "Utazás módosítása",
+                          "Utazás törlése",
+                          "Utazások törlése",
+                          "Összes utazás törlése",
+                         },
+                         [
+
+                         ]
+                          ),
                       () => carSharingServie.DbWipe()
                   ]
-                  )
+               )
             ]
             );
         }
