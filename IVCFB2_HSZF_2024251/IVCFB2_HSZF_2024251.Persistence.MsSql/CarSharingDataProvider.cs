@@ -75,13 +75,15 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
         }
         public string MostUsedCar()
         {
-            var mostUsedCar = context.Trips.GroupBy(t => t.CarId)
-                .OrderByDescending(g => g.Count()).
-                Select(g => new
-                {
-                    CarId = g.Key,
-                    Count = g.Count(),
-                }).FirstOrDefault();
+            var mostUsedCar = context.Trips
+         .GroupBy(t => t.CarId)
+         .Select(g => new
+         {
+             CarId = g.Key,
+             TotalDistance = g.Sum(t => t.Distance)
+         })
+         .OrderByDescending(g => g.TotalDistance)
+         .FirstOrDefault();
 
             return context.Cars.Where(c => c.Id == mostUsedCar.CarId).Select(c => c.Model).FirstOrDefault();
         }
