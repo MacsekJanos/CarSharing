@@ -9,6 +9,8 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
     public class CarSharingDataProvider : ICarSharingDataProvider
     {
         private CarSharingDbContext context;
+
+        private readonly DBEvent dbEvent = new DBEvent();
         public CarSharingDataProvider(CarSharingDbContext context)
         {
             this.context = context;
@@ -25,6 +27,8 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
             context.Database.ExecuteSqlRaw("DBCC CHECKIDENT ('Trips', RESEED, 0);");
             context.Database.ExecuteSqlRaw("DBCC CHECKIDENT ('Cars', RESEED, 0);");
             context.Database.ExecuteSqlRaw("DBCC CHECKIDENT ('Customers', RESEED, 0);");
+
+            dbEvent.OnActionCompleted("Az adatbázis sikeresen törlődött");
         }
         public void DbSeed(string? path = null)
         {
@@ -74,6 +78,7 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
                 context.SaveChanges();
 
             }
+            dbEvent.OnActionCompleted("Az adatbázis sikeresen feltőltődött");
         }
         public void Print<T>(IEnumerable<T> data)
         {
@@ -123,7 +128,7 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
                .FirstOrDefault();
 
             Car result = context.Cars.Where(c => c.Id == mostUsedCar.CarId).FirstOrDefault();
-            Console.WriteLine("A legtöbbet futott kocsi: " + result);
+            Console.WriteLine("A legtöbbet futott kocsi: " + result.Model + "Idáig megtett út: " + result.TotalDistance + "Km");
             return "";
         }
 
@@ -151,7 +156,7 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
         public double AvgDistance()
         {
             var result = context.Cars.Average(c => c.TotalDistance);
-            Console.WriteLine("Az autók átlagos futása: " + result);
+            Console.WriteLine("Az autók átlagos futása: " + result + "Km");
             return result;
         }
 
@@ -166,8 +171,27 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
             return context.Cars.Find(id);
         }
 
-        public void AddCar(Car car)
+        public void AddCar()
         {
+
+            Console.WriteLine("Adja meg a modelt:");
+
+            string model = Console.ReadLine();
+
+            Console.WriteLine("Adja meg az eddig megtett távot:");
+            if (!double.TryParse(Console.ReadLine(), out double totalDistance) || totalDistance < 0)
+            {
+                dbEvent.OnActionCompleted("Érvénytelen bemenet a, távnak nullánál nagyobb számnak kell lennie.");
+                return;
+            }
+
+            var car = new Car
+            {
+                Model = model,
+                TotalDistance = totalDistance,
+                DistanceSinceLastMaintenance = 0
+            };
+            dbEvent.OnActionCompleted("Az új autó sikeresen bekerült a flottába!");
             context.Cars.Add(car);
             context.SaveChanges();
         }
@@ -215,8 +239,26 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
             return context.Customers.Find(id);
         }
 
-        public void AddCustomer(Customer customer)
+        public void AddCustomer()
         {
+            Console.WriteLine("Adja meg a vásárló nevét:");
+
+            string name = Console.ReadLine();
+
+            Console.WriteLine("Adja meg a vásárló áegyenlegét:");
+            if (!double.TryParse(Console.ReadLine(), out double balance) || balance < 0)
+            {
+                dbEvent.OnActionCompleted("Érvénytelen bemenet, az egyenlegnek nullánál nagyobb számnak kell lennie.");
+                return;
+            }
+
+            var customer = new Customer
+            {
+                Name = name,
+                Balance = balance,
+
+            };
+            dbEvent.OnActionCompleted("Az új vásárló sikeresen fel lett véve!");
             context.Customers.Add(customer);
             context.SaveChanges();
         }
@@ -263,9 +305,74 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
             return context.Trips.Find(id);
         }
 
-        public void AddTrip(Trip trip)
+        public void AddTrip()
         {
+
+            Console.WriteLine("Válasszon Vásárlót ID alapján:");
+            var customers = context.Customers.ToList();
+            ToList(customers);
+            if (!int.TryParse(Console.ReadLine(), out int customerId) || !customers.Any(c => c.Id == customerId))
+            {
+                dbEvent.OnActionCompleted("Érvénytelen ID.");
+                return;
+            }
+
+            var selectedCustomer = context.Customers.Find(customerId);
+            if (selectedCustomer.Balance < 40)
+            {
+                dbEvent.OnActionCompleted("Nincs elég fedezet, a minimum 40 euro");
+                return;
+            }
+
+            Console.WriteLine("Válasszon autót ID alapján:");
+            var cars = context.Cars.ToList();
+            ToList(cars);
+            if (!int.TryParse(Console.ReadLine(), out int carId) || !cars.Any(c => c.Id == carId))
+            {
+                dbEvent.OnActionCompleted("Érvénytelen autó ID.");
+                return;
+            }
+            var selectedCar = context.Cars.Find(carId);
+
+            Console.WriteLine("Adj meg a tervezett távolságot (km):");
+            if (!double.TryParse(Console.ReadLine(), out double distance) || distance <= 0)
+            {
+                dbEvent.OnActionCompleted("Érvénytelen táv, az útnak nullánál nagyobb számnak kell lennie.");
+                return;
+            }
+
+            double tripCost = 0.5 + (distance * 0.35);
+            if (selectedCustomer.Balance < tripCost)
+            {
+                dbEvent.OnActionCompleted("Nincs elég fedezet az útra");
+                return;
+            }
+
+            var trip = new Trip
+            {
+                CarId = carId,
+                CustomerId = customerId,
+                Distance = distance,
+                Cost = tripCost
+            };
+
             context.Trips.Add(trip);
+
+            selectedCustomer.Balance -= tripCost;
+            selectedCar.TotalDistance += distance;
+            selectedCar.DistanceSinceLastMaintenance += distance;
+
+            context.SaveChanges();
+
+            dbEvent.OnActionCompleted($"Sikeres út felvétel: Vásárló: {selectedCustomer.Name}, Autó: {selectedCar.Model}, Ár: {trip.Cost}€, Távolság: {trip.Distance} km.");
+
+
+            if (selectedCar.DistanceSinceLastMaintenance >= 200 || new Random().Next(1, 101) <= 20)
+            {
+                dbEvent.OnActionCompleted($"Az autó {selectedCar.Model} szervízt igényelt!");
+                selectedCar.DistanceSinceLastMaintenance = 0;
+            }
+
             context.SaveChanges();
         }
 

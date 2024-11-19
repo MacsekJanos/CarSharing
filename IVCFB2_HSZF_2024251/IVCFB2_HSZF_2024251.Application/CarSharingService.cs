@@ -5,26 +5,24 @@ namespace IVCFB2_HSZF_2024251.Application
 {
     public class CarSharingService : ICarSharingService
     {
-        private readonly DBEvent dbEvent;
+
 
         private readonly ICarSharingDataProvider dataProvider;
 
         public CarSharingService(ICarSharingDataProvider dataProvider)
         {
             this.dataProvider = dataProvider;
-            this.dbEvent = new DBEvent();
+
         }
 
         public void DbWipe()
         {
             dataProvider.DbWipe();
-            dbEvent.OnActionCompleted("Az adatbázis sikeresen törlődött");
         }
 
         public void DbSeed(string? path = null)
         {
             dataProvider.DbSeed();
-            dbEvent.OnActionCompleted("Az adatbázis sikeresen feltöltődött");
         }
 
         public void Print<T>(IEnumerable<T> data)
@@ -62,9 +60,9 @@ namespace IVCFB2_HSZF_2024251.Application
             return dataProvider.GetCarById(id);
         }
 
-        public void AddCar(Car car)
+        public void AddCar()
         {
-            dataProvider.AddCar(car);
+            dataProvider.AddCar();
         }
 
         public void UpdateCar(Car car)
@@ -96,9 +94,9 @@ namespace IVCFB2_HSZF_2024251.Application
             return dataProvider.GetCustomerById(id);
         }
 
-        public void AddCustomer(Customer customer)
+        public void AddCustomer()
         {
-            dataProvider.AddCustomer(customer);
+            dataProvider.AddCustomer();
         }
 
         public void UpdateCustomer(Customer customer)
@@ -130,9 +128,9 @@ namespace IVCFB2_HSZF_2024251.Application
             return dataProvider.GetTripById(id);
         }
 
-        public void AddTrip(Trip trip)
+        public void AddTrip()
         {
-            dataProvider.AddTrip(trip);
+            dataProvider.AddTrip();
         }
 
         public void UpdateTrip(Trip trip)

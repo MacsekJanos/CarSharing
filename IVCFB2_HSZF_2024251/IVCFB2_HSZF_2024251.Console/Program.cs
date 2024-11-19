@@ -73,7 +73,7 @@ namespace IVCFB2_HSZF_2024251
                           "Összes autó törlése",
                          },
                          [
-
+                             () => carSharingServie.AddCar(),
                          ]
                           ),
 
@@ -87,6 +87,7 @@ namespace IVCFB2_HSZF_2024251
                           "Összes vásárló törlése",
                          },
                          [
+                             () => carSharingServie.AddCustomer(),
 
                          ]
                           ),
@@ -101,7 +102,7 @@ namespace IVCFB2_HSZF_2024251
                           "Összes utazás törlése",
                          },
                          [
-
+                             () => carSharingServie.AddTrip()
                          ]
                           ),
                            () => DisplayMenu(new string[]

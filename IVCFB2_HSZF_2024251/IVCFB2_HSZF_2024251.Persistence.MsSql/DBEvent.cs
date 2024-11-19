@@ -1,4 +1,4 @@
-﻿namespace IVCFB2_HSZF_2024251.Application
+﻿namespace IVCFB2_HSZF_2024251.Persistence.MsSql
 {
     public class DBEvent
     {

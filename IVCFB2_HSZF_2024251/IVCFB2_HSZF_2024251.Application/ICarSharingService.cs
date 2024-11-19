@@ -19,7 +19,7 @@ namespace IVCFB2_HSZF_2024251.Application
         //Cars
         IEnumerable<Car> GetAllCars();
         Car GetCarById(int id);
-        void AddCar(Car car);
+        void AddCar();
         void UpdateCar(Car car);
         void DeleteCar(int id);
 
@@ -29,7 +29,7 @@ namespace IVCFB2_HSZF_2024251.Application
         //Customers
         IEnumerable<Customer> GetAllCustomers();
         Customer GetCustomerById(int id);
-        void AddCustomer(Customer customer);
+        void AddCustomer();
         void UpdateCustomer(Customer customer);
         void DeleteCustomer(int id);
         void DeleteCustomers(int[] ids);
@@ -39,7 +39,7 @@ namespace IVCFB2_HSZF_2024251.Application
         //Trips
         IEnumerable<Trip> GetAllTrips();
         Trip GetTripById(int id);
-        void AddTrip(Trip trip);
+        void AddTrip();
         void UpdateTrip(Trip trip);
         void DeleteTrip(int id);
         void DeleteTrips(int[] ids);
