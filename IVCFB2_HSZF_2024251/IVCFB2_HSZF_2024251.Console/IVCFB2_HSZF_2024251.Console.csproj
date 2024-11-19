@@ -23,5 +23,11 @@
     <ProjectReference Include="..\IVCFB2_HSZF_2024251.Model\IVCFB2_HSZF_2024251.Model.csproj" />
     <ProjectReference Include="..\IVCFB2_HSZF_2024251.Persistence.MsSql\IVCFB2_HSZF_2024251.Persistence.MsSql.csproj" />
   </ItemGroup>
+	
+  <ItemGroup>
+	<None Update="carsharing.xml">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</None>
+  </ItemGroup>
 
 </Project>

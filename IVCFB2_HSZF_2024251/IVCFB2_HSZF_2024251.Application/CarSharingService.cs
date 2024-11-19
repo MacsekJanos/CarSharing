@@ -5,21 +5,26 @@ namespace IVCFB2_HSZF_2024251.Application
 {
     public class CarSharingService : ICarSharingService
     {
+        private readonly DBEvent dbEvent;
+
         private readonly ICarSharingDataProvider dataProvider;
 
         public CarSharingService(ICarSharingDataProvider dataProvider)
         {
             this.dataProvider = dataProvider;
+            this.dbEvent = new DBEvent();
         }
 
         public void DbWipe()
         {
             dataProvider.DbWipe();
+            dbEvent.OnActionCompleted("Az adatbázis sikeresen törlődött");
         }
 
         public void DbSeed(string? path = null)
         {
             dataProvider.DbSeed();
+            dbEvent.OnActionCompleted("Az adatbázis sikeresen feltöltődött");
         }
 
         public string MostUsedCar()
