@@ -83,8 +83,8 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
                  CarId = g.Key,
                  TotalDistance = g.Sum(t => t.Distance)
              })
-       .OrderByDescending(g => g.TotalDistance)
-       .FirstOrDefault();
+              .OrderByDescending(g => g.TotalDistance)
+               .FirstOrDefault();
 
             return context.Cars.Where(c => c.Id == mostUsedCar.CarId).Select(c => c.Model).FirstOrDefault();
         }
