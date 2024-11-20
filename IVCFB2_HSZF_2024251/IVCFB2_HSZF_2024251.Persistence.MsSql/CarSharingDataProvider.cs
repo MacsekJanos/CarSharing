@@ -194,47 +194,29 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
 
             dbEvent.OnActionCompleted("Az autók adatai sikeresen exportálva lettek a cars.csv fájlba.");
         }
-        public void AddCarFromConsole()
+        public void AddCar()
         {
-            Console.WriteLine("Adja meg a modellt:");
+
+            Console.WriteLine("Adja meg a modelt:");
+
             string model = Console.ReadLine();
-            if (string.IsNullOrEmpty(model))
-            {
-                Console.WriteLine("Érvénytelen bemenet. A modell nem lehet üres.");
-                return;
-            }
 
             Console.WriteLine("Adja meg az eddig megtett távot:");
-            string distanceInput = Console.ReadLine();
-            if (string.IsNullOrEmpty(distanceInput) || !double.TryParse(distanceInput, out double totalDistance) || totalDistance <= 0)
+            if (!double.TryParse(Console.ReadLine(), out double totalDistance) || totalDistance < 0)
             {
-                Console.WriteLine("Érvénytelen bemenet. A távnak nullánál nem kisebb számnak kell lennie.");
+                dbEvent.OnActionCompleted("Érvénytelen bemenet a, távnak nullánál nagyobb számnak kell lennie.");
                 return;
             }
 
             var car = new Car
             {
                 Model = model,
-                TotalDistance = totalDistance
+                TotalDistance = totalDistance,
+                DistanceSinceLastMaintenance = 0
             };
-
-            AddCar(car);
-        }
-
-        public void AddCar(Car car)
-        {
-            if (car.TotalDistance <= 0)
-            {
-                dbEvent.OnActionCompleted("Érvénytelen bemenet: a távnak nullánál nagyobb számnak kell lennie.");
-                return;
-            }
-
-            car.DistanceSinceLastMaintenance = 0;
-
+            dbEvent.OnActionCompleted("Az új autó sikeresen bekerült a flottába!");
             context.Cars.Add(car);
             context.SaveChanges();
-
-            dbEvent.OnActionCompleted("Az új autó sikeresen bekerült a flottába!");
         }
 
         public void UpdateCar()

@@ -70,7 +70,7 @@ namespace IVCFB2_HSZF_2024251
                           "Összes autó törlése",
                          },
                          [
-                             () => carSharingServie.AddCarFromConsole(),
+                             () => carSharingServie.AddCar(),
                              () => carSharingServie.UpdateCar(),
                              () => carSharingServie.DeleteCar(),
                              () => carSharingServie.DeleteCars(),

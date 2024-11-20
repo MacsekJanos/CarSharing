@@ -67,14 +67,9 @@ namespace IVCFB2_HSZF_2024251.Application
         {
             dataProvider.CarsToExcel();
         }
-
-        public void AddCarFromConsole()
+        public void AddCar()
         {
-            dataProvider.AddCarFromConsole();
-        }
-        public void AddCar(Car car)
-        {
-            dataProvider.AddCar(car);
+            dataProvider.AddCar();
         }
 
         public void UpdateCar()

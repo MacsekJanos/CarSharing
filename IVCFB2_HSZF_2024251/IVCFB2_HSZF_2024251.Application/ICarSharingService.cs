@@ -21,8 +21,7 @@ namespace IVCFB2_HSZF_2024251.Application
         Car GetCarById(int id);
 
         void CarsToExcel();
-        void AddCar(Car car);
-        void AddCarFromConsole();
+        void AddCar();
         void UpdateCar();
         void DeleteCar();
 
