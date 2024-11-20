@@ -15,6 +15,7 @@ namespace IVCFB2_HSZF_2024251.Application
 
         }
 
+        //Db
         public void DbWipe()
         {
             dataProvider.DbWipe();
@@ -50,6 +51,8 @@ namespace IVCFB2_HSZF_2024251.Application
             return dataProvider.AvgDistance();
         }
 
+        //Cars
+
         public IEnumerable<Car> GetAllCars()
         {
             return dataProvider.GetAllCars();
@@ -60,6 +63,10 @@ namespace IVCFB2_HSZF_2024251.Application
             return dataProvider.GetCarById(id);
         }
 
+        public void CarsToExcel()
+        {
+            dataProvider.CarsToExcel();
+        }
         public void AddCar()
         {
             dataProvider.AddCar();
@@ -84,6 +91,8 @@ namespace IVCFB2_HSZF_2024251.Application
             dataProvider.DeleteAllCar();
         }
 
+        //Customers
+
         public IEnumerable<Customer> GetAllCustomers()
         {
             return dataProvider.GetAllCustomers();
@@ -92,6 +101,13 @@ namespace IVCFB2_HSZF_2024251.Application
         public Customer GetCustomerById(int id)
         {
             return dataProvider.GetCustomerById(id);
+
+
+        }
+
+        public void CustomersToExcel()
+        {
+            dataProvider.CustomersToExcel();
         }
 
         public void AddCustomer()
@@ -118,6 +134,8 @@ namespace IVCFB2_HSZF_2024251.Application
         {
             dataProvider.DeleteAllCustomer();
         }
+
+        //Trips
         public IEnumerable<Trip> GetAllTrips()
         {
             return dataProvider.GetAllTrips();
@@ -128,6 +146,10 @@ namespace IVCFB2_HSZF_2024251.Application
             return dataProvider.GetTripById(id);
         }
 
+        public void TripsToExcel()
+        {
+            dataProvider.TripsToExcel();
+        }
         public void AddTrip()
         {
             dataProvider.AddTrip();

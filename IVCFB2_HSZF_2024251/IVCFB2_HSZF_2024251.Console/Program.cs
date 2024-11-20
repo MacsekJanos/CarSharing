@@ -77,6 +77,8 @@ namespace IVCFB2_HSZF_2024251
                              () => carSharingServie.UpdateCar(),
                              () => carSharingServie.DeleteCar(),
                              () => carSharingServie.DeleteCars(),
+                             () => carSharingServie.CarsToExcel(),
+                             () => carSharingServie.DeleteAllCar(),
                          ]
                           ),
 
@@ -94,6 +96,8 @@ namespace IVCFB2_HSZF_2024251
                              () => carSharingServie.UpdateCustomer(),
                              () => carSharingServie.DeleteCustomer(),
                              () => carSharingServie.DeleteCustomers(),
+                             () => carSharingServie.CustomersToExcel(),
+                             () => carSharingServie.DeleteAllCustomer(),
 
                          ]
                           ),
@@ -112,6 +116,8 @@ namespace IVCFB2_HSZF_2024251
                              () => carSharingServie.UpdateTrip(),
                              () => carSharingServie.DeleteTrip(),
                              () => carSharingServie.DeleteTrips(),
+                             () => carSharingServie.TripsToExcel(),
+                             () => carSharingServie.DeleteAllTrip(),
                          ]
                           ),
                            () => DisplayMenu(new string[]

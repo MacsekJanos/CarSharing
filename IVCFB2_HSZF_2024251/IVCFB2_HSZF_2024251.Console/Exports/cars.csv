@@ -1,0 +1,21 @@
+Id;Model;TotalDistance;DistanceSinceLastMaintenance
+1;Toyota Corolla;750,5300000000001;24,7
+2;Honda Civic;67,89;11,8
+3;Ford Focus;272,47;198,9
+4;Chevrolet Malibu;600,96;53,4
+5;Nissan Altima;654,1400000000001;22,3
+6;Volkswagen Passat;509,59000000000003;16,8
+7;BMW 3 Series;655,54;104,3
+8;Audi A4;685,1600000000001;63,9
+9;Mercedes-Benz C-Class;361,97;34,2
+10;Hyundai Elantra;701,19;12,5
+11;Kia Optima;360,03999999999996;42,8
+12;Mazda 6;349,62;56,3
+13;Subaru Impreza;453,39;98,7
+14;Volvo S60;715,34;109,5
+15;Tesla Model 3;382,19;20
+16;Chevrolet Cruze;818,3499999999999;48,3
+17;Honda Accord;1017,7500000000001;78,9
+18;Ford Fusion;546,43;109,3
+19;Chrysler 300;274,15999999999997;84,1
+20;Volkswagen Jetta;215,17000000000002;27,9

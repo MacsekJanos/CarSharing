@@ -171,6 +171,29 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
             return context.Cars.Find(id);
         }
 
+        public void CarsToExcel()
+        {
+            var cars = context.Cars.ToList();
+            var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            var projectDirectory = Path.GetFullPath(Path.Combine(baseDirectory, @"..\..\.."));
+            var csvFilePath = Path.Combine(projectDirectory, "Exports", "cars.csv");
+
+            Directory.CreateDirectory(Path.GetDirectoryName(csvFilePath));
+
+            using (var writer = new StreamWriter(csvFilePath))
+            {
+                var properties = typeof(Car).GetProperties();
+                writer.WriteLine(string.Join(";", properties.Select(p => p.Name)));
+
+                foreach (var car in cars)
+                {
+                    var values = properties.Select(p => p.GetValue(car)?.ToString()?.Replace(";", ",") ?? string.Empty);
+                    writer.WriteLine(string.Join(";", values));
+                }
+            }
+
+            dbEvent.OnActionCompleted("Az autók adatai sikeresen exportálva lettek a cars.csv fájlba.");
+        }
         public void AddCar()
         {
 
@@ -301,7 +324,29 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
         {
             return context.Customers.Find(id);
         }
+        public void CustomersToExcel()
+        {
+            var customers = context.Customers.ToList();
+            var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            var projectDirectory = Path.GetFullPath(Path.Combine(baseDirectory, @"..\..\..\"));
+            var csvFilePath = Path.Combine(projectDirectory, "Exports", "customers.csv");
 
+            Directory.CreateDirectory(Path.GetDirectoryName(csvFilePath));
+
+            using (var writer = new StreamWriter(csvFilePath))
+            {
+                var properties = typeof(Customer).GetProperties();
+                writer.WriteLine(string.Join(";", properties.Select(p => p.Name)));
+
+                foreach (var customer in customers)
+                {
+                    var values = properties.Select(p => p.GetValue(customer)?.ToString()?.Replace(";", ",") ?? string.Empty);
+                    writer.WriteLine(string.Join(";", values));
+                }
+            }
+
+            dbEvent.OnActionCompleted("A vásárlók adatai sikeresen exportálva lettek a customers.csv fájlba.");
+        }
         public void AddCustomer()
         {
             Console.WriteLine("Adja meg a vásárló nevét:");
@@ -426,6 +471,31 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
             return context.Trips.Find(id);
         }
 
+        public void TripsToExcel()
+        {
+            var trips = context.Trips.ToList();
+            var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            var projectDirectory = Path.GetFullPath(Path.Combine(baseDirectory, @"..\..\.."));
+            var csvFilePath = Path.Combine(projectDirectory, "Exports", "trips.csv");
+
+            Directory.CreateDirectory(Path.GetDirectoryName(csvFilePath));
+
+            using (var writer = new StreamWriter(csvFilePath))
+            {
+                var properties = typeof(Trip).GetProperties()
+                                             .Where(p => !typeof(Customer).IsAssignableFrom(p.PropertyType) && !typeof(Car).IsAssignableFrom(p.PropertyType))
+                                             .ToArray();
+                writer.WriteLine(string.Join(";", properties.Select(p => p.Name)));
+
+                foreach (var trip in trips)
+                {
+                    var values = properties.Select(p => p.GetValue(trip)?.ToString()?.Replace(";", ",") ?? string.Empty);
+                    writer.WriteLine(string.Join(";", values));
+                }
+            }
+
+            dbEvent.OnActionCompleted("Az utak adatai sikeresen exportálva lettek a trips.csv fájlba.");
+        }
         public void AddTrip()
         {
 

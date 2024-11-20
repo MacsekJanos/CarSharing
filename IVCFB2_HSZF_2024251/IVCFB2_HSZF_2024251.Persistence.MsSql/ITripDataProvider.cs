@@ -6,6 +6,8 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
     {
         IEnumerable<Trip> GetAllTrips();
         Trip GetTripById(int id);
+
+        void TripsToExcel();
         void AddTrip();
         void UpdateTrip();
         void DeleteTrip();
