@@ -8,7 +8,8 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
         Car GetCarById(int id);
 
         void CarsToExcel();
-        void AddCar();
+        void AddCarFromConsole();
+        void AddCar(Car car);
         void UpdateCar();
         void DeleteCar();
 
