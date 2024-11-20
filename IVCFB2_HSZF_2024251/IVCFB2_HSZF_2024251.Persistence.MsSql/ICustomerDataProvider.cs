@@ -7,10 +7,10 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
         IEnumerable<Customer> GetAllCustomers();
         Customer GetCustomerById(int id);
         void AddCustomer();
-        void UpdateCustomer(Customer customer);
-        void DeleteCustomer(int id);
+        void UpdateCustomer();
+        void DeleteCustomer();
 
-        void DeleteCustomers(int[] ids);
+        void DeleteCustomers();
         void DeleteAllCustomer();
     }
 }

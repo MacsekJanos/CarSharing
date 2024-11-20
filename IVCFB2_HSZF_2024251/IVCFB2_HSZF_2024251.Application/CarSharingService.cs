@@ -65,19 +65,19 @@ namespace IVCFB2_HSZF_2024251.Application
             dataProvider.AddCar();
         }
 
-        public void UpdateCar(Car car)
+        public void UpdateCar()
         {
-            dataProvider.UpdateCar(car);
+            dataProvider.UpdateCar();
         }
 
-        public void DeleteCar(int id)
+        public void DeleteCar()
         {
-            dataProvider.DeleteCar(id);
+            dataProvider.DeleteCar();
         }
 
-        public void DeleteCars(int[] ids)
+        public void DeleteCars()
         {
-            dataProvider.DeleteCars(ids);
+            dataProvider.DeleteCars();
         }
         public void DeleteAllCar()
         {
@@ -99,19 +99,19 @@ namespace IVCFB2_HSZF_2024251.Application
             dataProvider.AddCustomer();
         }
 
-        public void UpdateCustomer(Customer customer)
+        public void UpdateCustomer()
         {
-            dataProvider.UpdateCustomer(customer);
+            dataProvider.UpdateCustomer();
         }
 
-        public void DeleteCustomer(int id)
+        public void DeleteCustomer()
         {
-            dataProvider.DeleteCustomer(id);
+            dataProvider.DeleteCustomer();
         }
 
-        public void DeleteCustomers(int[] ids)
+        public void DeleteCustomers()
         {
-            dataProvider.DeleteCustomers(ids);
+            dataProvider.DeleteCustomers();
         }
 
         public void DeleteAllCustomer()
@@ -133,19 +133,19 @@ namespace IVCFB2_HSZF_2024251.Application
             dataProvider.AddTrip();
         }
 
-        public void UpdateTrip(Trip trip)
+        public void UpdateTrip()
         {
-            dataProvider.UpdateTrip(trip);
+            dataProvider.UpdateTrip();
         }
 
-        public void DeleteTrip(int id)
+        public void DeleteTrip()
         {
-            dataProvider.DeleteTrip(id);
+            dataProvider.DeleteTrip();
         }
 
-        public void DeleteTrips(int[] ids)
+        public void DeleteTrips()
         {
-            dataProvider.DeleteTrips(ids);
+            dataProvider.DeleteTrips();
         }
 
         public void DeleteAllTrip()

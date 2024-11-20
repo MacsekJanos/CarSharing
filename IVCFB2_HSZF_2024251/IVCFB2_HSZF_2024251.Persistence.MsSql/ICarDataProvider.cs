@@ -7,10 +7,10 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
         IEnumerable<Car> GetAllCars();
         Car GetCarById(int id);
         void AddCar();
-        void UpdateCar(Car car);
-        void DeleteCar(int id);
+        void UpdateCar();
+        void DeleteCar();
 
-        void DeleteCars(int[] ids);
+        void DeleteCars();
         void DeleteAllCar();
     }
 }

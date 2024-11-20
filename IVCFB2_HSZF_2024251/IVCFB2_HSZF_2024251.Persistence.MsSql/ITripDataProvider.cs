@@ -7,10 +7,10 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
         IEnumerable<Trip> GetAllTrips();
         Trip GetTripById(int id);
         void AddTrip();
-        void UpdateTrip(Trip trip);
-        void DeleteTrip(int id);
+        void UpdateTrip();
+        void DeleteTrip();
 
-        void DeleteTrips(int[] ids);
+        void DeleteTrips();
         void DeleteAllTrip();
     }
 }

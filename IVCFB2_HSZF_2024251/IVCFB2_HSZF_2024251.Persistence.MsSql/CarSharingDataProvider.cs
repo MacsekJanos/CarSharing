@@ -196,36 +196,99 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
             context.SaveChanges();
         }
 
-        public void UpdateCar(Car car)
+        public void UpdateCar()
         {
+            Console.WriteLine("Válasszon autót ID alapján:");
+            var cars = context.Cars.ToList();
+            ToList(cars);
+            if (!int.TryParse(Console.ReadLine(), out int carId) || !cars.Any(c => c.Id == carId))
+            {
+                dbEvent.OnActionCompleted("Érvénytelen autó ID.");
+                return;
+            }
+
+            var car = context.Cars.Find(carId);
+            if (car == null)
+            {
+                dbEvent.OnActionCompleted("Nem található autó a megadott ID-val.");
+                return;
+            }
+
+            Console.WriteLine("Adja meg az új modellt:");
+            car.Model = Console.ReadLine();
+
+            Console.WriteLine("Adja meg az eddig megtett távot:");
+            if (!double.TryParse(Console.ReadLine(), out double totalDistance) || totalDistance <= 0)
+            {
+                dbEvent.OnActionCompleted("Érvénytelen bemenet, a távnak nullánál nem kisebb számnak kell lennie.");
+                return;
+            }
+            car.TotalDistance = totalDistance;
+
+            Console.WriteLine("Adja meg a szerviz óta megtett távot:");
+            if (!double.TryParse(Console.ReadLine(), out double distanceSinceLastMaintenance) || distanceSinceLastMaintenance <= 0)
+            {
+                dbEvent.OnActionCompleted("Érvénytelen bemenet, a távnak nullánál nem kisebb számnak kell lennie.");
+                return;
+            }
+            car.DistanceSinceLastMaintenance = distanceSinceLastMaintenance > 200 ? distanceSinceLastMaintenance : 0;
             context.Cars.Update(car);
             context.SaveChanges();
+            dbEvent.OnActionCompleted("Az autó sikeresen frissítve lett!");
         }
 
-        public void DeleteCar(int id)
+        public void DeleteCar()
         {
-            var car = context.Cars.Find(id);
-            if (car != null)
+            Console.WriteLine("Válassza ki a törölni kívánt autót ID alapján:");
+            var cars = context.Cars.ToList();
+            ToList(cars);
+            if (!int.TryParse(Console.ReadLine(), out int carId) || !cars.Any(c => c.Id == carId))
             {
-                context.Cars.Remove(car);
-                context.SaveChanges();
+                dbEvent.OnActionCompleted("Érvénytelen autó ID.");
+                return;
             }
+
+            var car = context.Cars.Find(carId);
+            if (car == null)
+            {
+                dbEvent.OnActionCompleted("Nem található autó a megadott ID-val.");
+                return;
+            }
+
+            context.Cars.Remove(car);
+            context.SaveChanges();
+            dbEvent.OnActionCompleted("Az autó sikeresen törölve lett!");
         }
 
-        public void DeleteCars(int[] ids)
+        public void DeleteCars()
         {
-            var cars = context.Cars.Where(c => ids.Contains(c.Id)).ToList();
-            if (cars != null)
+            Console.WriteLine("Válassza ki a törölni kívánt autókat ID alapján, vesszővel elválasztva:");
+            var cars = context.Cars.ToList();
+            ToList(cars);
+            string input = Console.ReadLine();
+            var carIds = input.Split(',')
+                              .Select(id => int.TryParse(id.Trim(), out int carId) ? carId : (int?)null)
+                              .Where(id => id.HasValue)
+                              .Select(id => id.Value)
+                              .ToList();
+
+            if (!carIds.Any() || !carIds.All(id => cars.Any(c => c.Id == id)))
             {
-                context.Cars.RemoveRange(cars);
-                context.SaveChanges();
+                dbEvent.OnActionCompleted("Érvénytelen autó ID-k.");
+                return;
             }
+
+            var carsToDelete = context.Cars.Where(c => carIds.Contains(c.Id)).ToList();
+            context.Cars.RemoveRange(carsToDelete);
+            context.SaveChanges();
+            dbEvent.OnActionCompleted("Az autók sikeresen törölve lettek!");
         }
 
         public void DeleteAllCar()
         {
             context.Cars.RemoveRange(context.Cars);
             context.SaveChanges();
+            dbEvent.OnActionCompleted("Az összes autó törölve lett");
         }
 
         //CustomerActions
@@ -263,35 +326,93 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
             context.SaveChanges();
         }
 
-        public void UpdateCustomer(Customer customer)
+        public void UpdateCustomer()
         {
+            Console.WriteLine("Válasszon vásárlót ID alapján:");
+            var customers = context.Customers.ToList();
+            ToList(customers);
+            if (!int.TryParse(Console.ReadLine(), out int customerId) || !customers.Any(c => c.Id == customerId))
+            {
+                dbEvent.OnActionCompleted("Érvénytelen vásárló ID.");
+                return;
+            }
+
+            var customer = context.Customers.Find(customerId);
+            if (customer == null)
+            {
+                dbEvent.OnActionCompleted("Nem található vásárló a megadott ID-val.");
+                return;
+            }
+
+            Console.WriteLine("Adja meg az új nevet:");
+            customer.Name = Console.ReadLine();
+
+            Console.WriteLine("Adja meg az új egyenleget:");
+            if (!double.TryParse(Console.ReadLine(), out double balance) || balance <= 0)
+            {
+                dbEvent.OnActionCompleted("Érvénytelen bemenet, az egyenleg nulllánál nem kisebb számnak kell lennie.");
+                return;
+            }
+            customer.Balance = balance;
+
+
             context.Customers.Update(customer);
             context.SaveChanges();
+            dbEvent.OnActionCompleted("A vásárló adatai sikeresen frissültek!");
         }
 
-        public void DeleteCustomer(int id)
+        public void DeleteCustomer()
         {
-            var customer = context.Customers.Find(id);
-            if (customer != null)
+            Console.WriteLine("Válassza ki a törölni kívánt vásárlót ID alapján:");
+            var customers = context.Customers.ToList();
+            ToList(customers);
+            if (!int.TryParse(Console.ReadLine(), out int customerId) || !customers.Any(c => c.Id == customerId))
             {
-                context.Customers.Remove(customer);
-                context.SaveChanges();
+                dbEvent.OnActionCompleted("Érvénytelen vásárló ID.");
+                return;
             }
+
+            var customer = context.Customers.Find(customerId);
+            if (customer == null)
+            {
+                dbEvent.OnActionCompleted("Nem található vásárló a megadott ID-val.");
+                return;
+            }
+
+            context.Customers.Remove(customer);
+            context.SaveChanges();
+            dbEvent.OnActionCompleted("A vásárló sikeresen törölve lett!");
         }
 
-        public void DeleteCustomers(int[] ids)
+        public void DeleteCustomers()
         {
-            var customers = context.Customers.Where(c => ids.Contains(c.Id)).ToList();
-            if (customers != null)
+            Console.WriteLine("Válassza ki a törölni kívánt vásárlókat ID alapján, vesszővel elválasztva:");
+            var customers = context.Customers.ToList();
+            ToList(customers);
+
+            string input = Console.ReadLine();
+            var customerIds = input.Split(',')
+                                   .Select(id => int.TryParse(id.Trim(), out int customerId) ? customerId : (int?)null)
+                                   .Where(id => id.HasValue)
+                                   .Select(id => id.Value)
+                                   .ToList();
+
+            if (!customerIds.Any() || !customerIds.All(id => customers.Any(c => c.Id == id)))
             {
-                context.Customers.RemoveRange(customers);
-                context.SaveChanges();
+                dbEvent.OnActionCompleted("Érvénytelen vásárló ID-k.");
+                return;
             }
+
+            var customersToDelete = context.Customers.Where(c => customerIds.Contains(c.Id)).ToList();
+            context.Customers.RemoveRange(customersToDelete);
+            context.SaveChanges();
+            dbEvent.OnActionCompleted("A vásárlók sikeresen törölve lettek!");
         }
         public void DeleteAllCustomer()
         {
             context.Customers.RemoveRange(context.Customers);
             context.SaveChanges();
+            dbEvent.OnActionCompleted("Az összes várásló törölve lett!");
         }
 
         //Trip Actions
@@ -337,7 +458,7 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
             Console.WriteLine("Adj meg a tervezett távolságot (km):");
             if (!double.TryParse(Console.ReadLine(), out double distance) || distance <= 0)
             {
-                dbEvent.OnActionCompleted("Érvénytelen táv, az útnak nullánál nagyobb számnak kell lennie.");
+                dbEvent.OnActionCompleted("Érvénytelen táv, az útnak nullánál nem kisebb számnak kell lennie.");
                 return;
             }
 
@@ -364,7 +485,7 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
 
             context.SaveChanges();
 
-            dbEvent.OnActionCompleted($"Sikeres út felvétel: Vásárló: {selectedCustomer.Name}, Autó: {selectedCar.Model}, Ár: {trip.Cost}€, Távolság: {trip.Distance} km.");
+            dbEvent.OnActionCompleted($"Sikeres út felvétel: Vásárló: {selectedCustomer.Name}, Autó: {selectedCar.Model}, Ár: {trip.Cost}euro, Távolság: {trip.Distance} km.");
 
 
             if (selectedCar.DistanceSinceLastMaintenance >= 200 || new Random().Next(1, 101) <= 20)
@@ -376,35 +497,139 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
             context.SaveChanges();
         }
 
-        public void UpdateTrip(Trip trip)
+        public void UpdateTrip()
         {
+            Console.WriteLine("Válasszon utat ID alapján:");
+            var trips = context.Trips.ToList();
+            ToList(trips);
+            if (!int.TryParse(Console.ReadLine(), out int tripId) || !trips.Any(t => t.Id == tripId))
+            {
+                dbEvent.OnActionCompleted("Érvénytelen út ID.");
+                return;
+            }
+
+            var trip = context.Trips.Find(tripId);
+            if (trip == null)
+            {
+                dbEvent.OnActionCompleted("Nem található út a megadott ID-val.");
+                return;
+            }
+
+            Console.WriteLine("Válasszon Új Vásárlót ID alapján:");
+            var customers = context.Customers.ToList();
+            ToList(customers);
+            if (!int.TryParse(Console.ReadLine(), out int customerId) || !customers.Any(c => c.Id == customerId))
+            {
+                dbEvent.OnActionCompleted("Érvénytelen ID.");
+                return;
+            }
+
+            var selectedCustomer = context.Customers.Find(customerId);
+            if (selectedCustomer.Balance < 40)
+            {
+                dbEvent.OnActionCompleted("Nincs elég fedezet, a minimum 40 euro");
+                return;
+            }
+
+            Console.WriteLine("Válasszon új autót ID alapján:");
+            var cars = context.Cars.ToList();
+            ToList(cars);
+            if (!int.TryParse(Console.ReadLine(), out int carId) || !cars.Any(c => c.Id == carId))
+            {
+                dbEvent.OnActionCompleted("Érvénytelen autó ID.");
+                return;
+            }
+            var selectedCar = context.Cars.Find(carId);
+
+            Console.WriteLine("Adja meg az új távolságot (km):");
+            if (!double.TryParse(Console.ReadLine(), out double distance) || distance <= 0)
+            {
+                dbEvent.OnActionCompleted("Érvénytelen táv, az útnak nullánál nem kisebb számnak kell lennie.");
+                return;
+            }
+
+            double tripCost = 0.5 + (distance * 0.35);
+            if (selectedCustomer.Balance < tripCost)
+            {
+                dbEvent.OnActionCompleted("Nincs elég fedezet az útra");
+                return;
+            }
+
+            trip.CarId = carId;
+            trip.CustomerId = customerId;
+            trip.Distance = distance;
+            trip.Cost = tripCost;
+
+            selectedCustomer.Balance -= tripCost;
+            selectedCar.TotalDistance += distance;
+            selectedCar.DistanceSinceLastMaintenance += distance;
+
             context.Trips.Update(trip);
+            context.SaveChanges();
+
+            dbEvent.OnActionCompleted($"Sikeres út frissítés: Vásárló: {selectedCustomer.Name}, Autó: {selectedCar.Model}, Ár: {trip.Cost} euro, Távolság: {trip.Distance} km.");
+
+            if (selectedCar.DistanceSinceLastMaintenance >= 200 || new Random().Next(1, 101) <= 20)
+            {
+                dbEvent.OnActionCompleted($"Az autó {selectedCar.Model} szervízt igényelt!");
+                selectedCar.DistanceSinceLastMaintenance = 0;
+            }
+
             context.SaveChanges();
         }
 
-        public void DeleteTrip(int id)
+        public void DeleteTrip()
         {
-            var trip = context.Trips.Find(id);
-            if (trip != null)
+            Console.WriteLine("Válassza ki a törölni kívánt utat ID alapján:");
+            var trips = context.Trips.ToList();
+            ToList(trips);
+            if (!int.TryParse(Console.ReadLine(), out int tripId) || !trips.Any(t => t.Id == tripId))
             {
-                context.Trips.Remove(trip);
-                context.SaveChanges();
+                dbEvent.OnActionCompleted("Érvénytelen út ID.");
+                return;
             }
+
+            var trip = context.Trips.Find(tripId);
+            if (trip == null)
+            {
+                dbEvent.OnActionCompleted("Nem található út a megadott ID-val.");
+                return;
+            }
+
+            context.Trips.Remove(trip);
+            context.SaveChanges();
+            dbEvent.OnActionCompleted("Az út sikeresen törölve lett!");
         }
 
-        public void DeleteTrips(int[] ids)
+        public void DeleteTrips()
         {
-            var trips = context.Trips.Where(c => ids.Contains(c.Id)).ToList();
-            if (trips != null)
+            Console.WriteLine("Válassza ki a törölni kívánt utakat ID alapján, vesszővel elválasztva:");
+            var trips = context.Trips.ToList();
+            ToList(trips);
+
+            string input = Console.ReadLine();
+            var tripIds = input.Split(',')
+                               .Select(id => int.TryParse(id.Trim(), out int tripId) ? tripId : (int?)null)
+                               .Where(id => id.HasValue)
+                               .Select(id => id.Value)
+                               .ToList();
+
+            if (!tripIds.Any() || !tripIds.All(id => trips.Any(t => t.Id == id)))
             {
-                context.Trips.RemoveRange(trips);
-                context.SaveChanges();
+                dbEvent.OnActionCompleted("Érvénytelen út ID-k.");
+                return;
             }
+
+            var tripsToDelete = context.Trips.Where(t => tripIds.Contains(t.Id)).ToList();
+            context.Trips.RemoveRange(tripsToDelete);
+            context.SaveChanges();
+            dbEvent.OnActionCompleted("Az utak sikeresen törölve lettek!");
         }
         public void DeleteAllTrip()
         {
             context.Trips.RemoveRange(context.Trips);
             context.SaveChanges();
+            dbEvent.OnActionCompleted("Az összes út törölve lett");
         }
     }
 }
