@@ -24,9 +24,6 @@ namespace IVCFB2_HSZF_2024251
             using IServiceScope serviceScope = host.Services.CreateScope();
             var carSharingServie = host.Services.GetService<ICarSharingService>();
 
-            carSharingServie.DbWipe();
-            carSharingServie.DbSeed();
-
             DisplayMenu(
             new string[]
             {
