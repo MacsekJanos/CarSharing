@@ -277,6 +277,7 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
             }
             context.Cars.Update(car);
             context.SaveChanges();
+            return;
         }
 
         public void DeleteCarFromConsole()
@@ -307,6 +308,7 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
             }
             context.Cars.Remove(car);
             context.SaveChanges();
+
         }
 
         public void DeleteCars()

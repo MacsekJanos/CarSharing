@@ -71,9 +71,14 @@ namespace IVCFB2_HSZF_2024251.Application
         {
             dataProvider.AddCarFromConsole();
         }
-        public void AddCar(Car car)
+        public bool AddCar(Car car)
         {
+            if (car == null || string.IsNullOrEmpty(car.Model) || car.TotalDistance < 0)
+            {
+                return false;
+            }
             dataProvider.AddCar(car);
+            return true;
         }
 
         public void UpdateCarFromConsole()
@@ -81,17 +86,27 @@ namespace IVCFB2_HSZF_2024251.Application
             dataProvider.UpdateCarFromConsole();
         }
 
-        public void UpdateCar(Car car)
+        public bool UpdateCar(Car car)
         {
+            if (car == null || string.IsNullOrEmpty(car.Model) || car.TotalDistance < 0 || car.DistanceSinceLastMaintenance < 0)
+            {
+                return false;
+            }
             dataProvider.UpdateCar(car);
+            return true;
         }
         public void DeleteCarFromConsole()
         {
             dataProvider.DeleteCarFromConsole();
         }
-        public void DeleteCar(Car car)
+        public bool DeleteCar(Car car)
         {
+            if (car == null)
+            {
+                return false;
+            }
             dataProvider.DeleteCar(car);
+            return true;
         }
 
         public void DeleteCars()
