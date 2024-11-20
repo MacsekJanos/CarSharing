@@ -373,13 +373,18 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
 
             dbEvent.OnActionCompleted("A vásárlók adatai sikeresen exportálva lettek a customers.csv fájlba.");
         }
-        public void AddCustomer()
+        public void AddCustomerFromConsole()
         {
             Console.WriteLine("Adja meg a vásárló nevét:");
-
             string name = Console.ReadLine();
 
-            Console.WriteLine("Adja meg a vásárló áegyenlegét:");
+            if (string.IsNullOrEmpty(name))
+            {
+                dbEvent.OnActionCompleted("Érvénytelen bemenet, a név nem lehet üres.");
+                return;
+            }
+
+            Console.WriteLine("Adja meg a vásárló egyenlegét:");
             if (!double.TryParse(Console.ReadLine(), out double balance) || balance < 0)
             {
                 dbEvent.OnActionCompleted("Érvénytelen bemenet, az egyenlegnek nullánál nagyobb számnak kell lennie.");
@@ -389,19 +394,30 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
             var customer = new Customer
             {
                 Name = name,
-                Balance = balance,
-
+                Balance = balance
             };
+
+            AddCustomer(customer);
             dbEvent.OnActionCompleted("Az új vásárló sikeresen fel lett véve!");
+        }
+
+        public void AddCustomer(Customer customer)
+        {
+            if (customer == null || string.IsNullOrEmpty(customer.Name) || customer.Balance < 0)
+            {
+                return;
+            }
+
             context.Customers.Add(customer);
             context.SaveChanges();
         }
 
-        public void UpdateCustomer()
+        public void UpdateCustomerFromConsole()
         {
             Console.WriteLine("Válasszon vásárlót ID alapján:");
             var customers = context.Customers.ToList();
             ToList(customers);
+
             if (!int.TryParse(Console.ReadLine(), out int customerId) || !customers.Any(c => c.Id == customerId))
             {
                 dbEvent.OnActionCompleted("Érvénytelen vásárló ID.");
@@ -416,27 +432,45 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
             }
 
             Console.WriteLine("Adja meg az új nevet:");
-            customer.Name = Console.ReadLine();
+            string newName = Console.ReadLine();
 
-            Console.WriteLine("Adja meg az új egyenleget:");
-            if (!double.TryParse(Console.ReadLine(), out double balance) || balance <= 0)
+            if (string.IsNullOrEmpty(newName))
             {
-                dbEvent.OnActionCompleted("Érvénytelen bemenet, az egyenleg nulllánál nem kisebb számnak kell lennie.");
+                dbEvent.OnActionCompleted("Érvénytelen bemenet, a név nem lehet üres.");
                 return;
             }
+
+            Console.WriteLine("Adja meg az új egyenleget:");
+            if (!double.TryParse(Console.ReadLine(), out double balance) || balance < 0)
+            {
+                dbEvent.OnActionCompleted("Érvénytelen bemenet, az egyenlegnek nullánál nagyobb számnak kell lennie.");
+                return;
+            }
+
+            customer.Name = newName;
             customer.Balance = balance;
 
-
-            context.Customers.Update(customer);
-            context.SaveChanges();
+            UpdateCustomer(customer);
             dbEvent.OnActionCompleted("A vásárló adatai sikeresen frissültek!");
         }
 
-        public void DeleteCustomer()
+        public void UpdateCustomer(Customer customer)
+        {
+            if (customer == null || string.IsNullOrEmpty(customer.Name) || customer.Balance < 0)
+            {
+                return;
+            }
+
+            context.Customers.Update(customer);
+            context.SaveChanges();
+        }
+
+        public void DeleteCustomerFromConsole()
         {
             Console.WriteLine("Válassza ki a törölni kívánt vásárlót ID alapján:");
             var customers = context.Customers.ToList();
             ToList(customers);
+
             if (!int.TryParse(Console.ReadLine(), out int customerId) || !customers.Any(c => c.Id == customerId))
             {
                 dbEvent.OnActionCompleted("Érvénytelen vásárló ID.");
@@ -450,9 +484,18 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
                 return;
             }
 
+            DeleteCustomer(customer);
+            dbEvent.OnActionCompleted("A vásárló sikeresen törölve lett!");
+        }
+        public void DeleteCustomer(Customer customer)
+        {
+            if (customer == null)
+            {
+                return;
+            }
+
             context.Customers.Remove(customer);
             context.SaveChanges();
-            dbEvent.OnActionCompleted("A vásárló sikeresen törölve lett!");
         }
 
         public void DeleteCustomers()

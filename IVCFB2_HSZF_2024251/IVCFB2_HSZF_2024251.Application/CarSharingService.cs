@@ -122,19 +122,31 @@ namespace IVCFB2_HSZF_2024251.Application
             dataProvider.CustomersToExcel();
         }
 
-        public void AddCustomer()
+        public void AddCustomerFromConsole()
         {
-            dataProvider.AddCustomer();
+            dataProvider.AddCustomerFromConsole();
+        }
+        public void AddCustomer(Customer customer)
+        {
+            dataProvider.AddCustomer(customer);
         }
 
-        public void UpdateCustomer()
+        public void UpdateCustomerFromConsole()
         {
-            dataProvider.UpdateCustomer();
+            dataProvider.UpdateCustomerFromConsole();
+        }
+        public void UpdateCustomer(Customer customer)
+        {
+            dataProvider.UpdateCustomer(customer);
         }
 
-        public void DeleteCustomer()
+        public void DeleteCustomerFromConsole()
         {
-            dataProvider.DeleteCustomer();
+            dataProvider.DeleteCustomerFromConsole();
+        }
+        public void DeleteCustomer(Customer customer)
+        {
+            dataProvider.DeleteCustomer(customer);
         }
 
         public void DeleteCustomers()

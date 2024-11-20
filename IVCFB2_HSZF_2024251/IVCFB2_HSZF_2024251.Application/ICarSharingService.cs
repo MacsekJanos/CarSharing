@@ -36,9 +36,14 @@ namespace IVCFB2_HSZF_2024251.Application
         Customer GetCustomerById(int id);
 
         void CustomersToExcel();
-        void AddCustomer();
-        void UpdateCustomer();
-        void DeleteCustomer();
+        void AddCustomerFromConsole();
+        void AddCustomer(Customer customer);
+
+        void UpdateCustomerFromConsole();
+        void UpdateCustomer(Customer customer);
+
+        void DeleteCustomerFromConsole();
+        void DeleteCustomer(Customer customer);
         void DeleteCustomers();
 
         void DeleteAllCustomer();

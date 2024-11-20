@@ -89,9 +89,9 @@ namespace IVCFB2_HSZF_2024251
                           "Összes vásárló törlése",
                          },
                          [
-                             () => carSharingServie.AddCustomer(),
-                             () => carSharingServie.UpdateCustomer(),
-                             () => carSharingServie.DeleteCustomer(),
+                             () => carSharingServie.AddCustomerFromConsole(),
+                             () => carSharingServie.UpdateCustomerFromConsole(),
+                             () => carSharingServie.DeleteCustomerFromConsole(),
                              () => carSharingServie.DeleteCustomers(),
                              () => carSharingServie.CustomersToExcel(),
                              () => carSharingServie.DeleteAllCustomer(),
