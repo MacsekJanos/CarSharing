@@ -76,14 +76,22 @@ namespace IVCFB2_HSZF_2024251.Application
             dataProvider.AddCar(car);
         }
 
-        public void UpdateCar()
+        public void UpdateCarFromConsole()
         {
-            dataProvider.UpdateCar();
+            dataProvider.UpdateCarFromConsole();
         }
 
-        public void DeleteCar()
+        public void UpdateCar(Car car)
         {
-            dataProvider.DeleteCar();
+            dataProvider.UpdateCar(car);
+        }
+        public void DeleteCarFromConsole()
+        {
+            dataProvider.DeleteCarFromConsole();
+        }
+        public void DeleteCar(Car car)
+        {
+            dataProvider.DeleteCar(car);
         }
 
         public void DeleteCars()

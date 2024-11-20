@@ -71,8 +71,8 @@ namespace IVCFB2_HSZF_2024251
                          },
                          [
                              () => carSharingServie.AddCarFromConsole(),
-                             () => carSharingServie.UpdateCar(),
-                             () => carSharingServie.DeleteCar(),
+                             () => carSharingServie.UpdateCarFromConsole(),
+                             () => carSharingServie.DeleteCarFromConsole(),
                              () => carSharingServie.DeleteCars(),
                              () => carSharingServie.CarsToExcel(),
                              () => carSharingServie.DeleteAllCar(),

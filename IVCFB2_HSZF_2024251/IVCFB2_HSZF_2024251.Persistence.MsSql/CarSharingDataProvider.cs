@@ -197,7 +197,6 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
 
         public void AddCarFromConsole()
         {
-
             Console.WriteLine("Adja meg a modelt:");
             string model = Console.ReadLine();
             if (string.IsNullOrEmpty(model))
@@ -219,26 +218,21 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
                 DistanceSinceLastMaintenance = 0
             };
             dbEvent.OnActionCompleted("Az új autó sikeresen bekerült a flottába!");
-
             AddCar(car);
         }
+
         public void AddCar(Car car)
         {
-            if (car.TotalDistance < 0)
+            if (car == null || string.IsNullOrEmpty(car.Model) || car.TotalDistance < 0)
             {
-                dbEvent.OnActionCompleted("Érvénytelen bemenet: a távnak nullánál nagyobb számnak kell lennie.");
                 return;
             }
-
             car.DistanceSinceLastMaintenance = 0;
-
             context.Cars.Add(car);
             context.SaveChanges();
-
-            dbEvent.OnActionCompleted("Az új autó sikeresen bekerült a flottába!");
         }
 
-        public void UpdateCar()
+        public void UpdateCarFromConsole()
         {
             Console.WriteLine("Válasszon autót ID alapján:");
             var cars = context.Cars.ToList();
@@ -248,38 +242,44 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
                 dbEvent.OnActionCompleted("Érvénytelen autó ID.");
                 return;
             }
-
             var car = context.Cars.Find(carId);
             if (car == null)
             {
                 dbEvent.OnActionCompleted("Nem található autó a megadott ID-val.");
                 return;
             }
-
             Console.WriteLine("Adja meg az új modellt:");
-            car.Model = Console.ReadLine();
-
+            string newModel = Console.ReadLine();
             Console.WriteLine("Adja meg az eddig megtett távot:");
-            if (!double.TryParse(Console.ReadLine(), out double totalDistance) || totalDistance <= 0)
+            if (!double.TryParse(Console.ReadLine(), out double totalDistance) || totalDistance < 0)
             {
                 dbEvent.OnActionCompleted("Érvénytelen bemenet, a távnak nullánál nem kisebb számnak kell lennie.");
                 return;
             }
-            car.TotalDistance = totalDistance;
-
             Console.WriteLine("Adja meg a szerviz óta megtett távot:");
             if (!double.TryParse(Console.ReadLine(), out double distanceSinceLastMaintenance) || distanceSinceLastMaintenance <= 0)
             {
                 dbEvent.OnActionCompleted("Érvénytelen bemenet, a távnak nullánál nem kisebb számnak kell lennie.");
                 return;
             }
-            car.DistanceSinceLastMaintenance = distanceSinceLastMaintenance > 200 ? distanceSinceLastMaintenance : 0;
-            context.Cars.Update(car);
-            context.SaveChanges();
+            car.Model = newModel;
+            car.TotalDistance = totalDistance;
+            car.DistanceSinceLastMaintenance = distanceSinceLastMaintenance > 200 ? 0 : distanceSinceLastMaintenance;
+            UpdateCar(car);
             dbEvent.OnActionCompleted("Az autó sikeresen frissítve lett!");
         }
 
-        public void DeleteCar()
+        public void UpdateCar(Car car)
+        {
+            if (car == null || string.IsNullOrEmpty(car.Model) || car.TotalDistance < 0 || car.DistanceSinceLastMaintenance < 0)
+            {
+                return;
+            }
+            context.Cars.Update(car);
+            context.SaveChanges();
+        }
+
+        public void DeleteCarFromConsole()
         {
             Console.WriteLine("Válassza ki a törölni kívánt autót ID alapján:");
             var cars = context.Cars.ToList();
@@ -289,17 +289,24 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
                 dbEvent.OnActionCompleted("Érvénytelen autó ID.");
                 return;
             }
-
             var car = context.Cars.Find(carId);
             if (car == null)
             {
                 dbEvent.OnActionCompleted("Nem található autó a megadott ID-val.");
                 return;
             }
+            DeleteCar(car);
+            dbEvent.OnActionCompleted("Az autó sikeresen törölve lett!");
+        }
 
+        public void DeleteCar(Car car)
+        {
+            if (car == null)
+            {
+                return;
+            }
             context.Cars.Remove(car);
             context.SaveChanges();
-            dbEvent.OnActionCompleted("Az autó sikeresen törölve lett!");
         }
 
         public void DeleteCars()

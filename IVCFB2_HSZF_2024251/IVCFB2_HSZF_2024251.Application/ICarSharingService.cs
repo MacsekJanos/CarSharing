@@ -23,8 +23,10 @@ namespace IVCFB2_HSZF_2024251.Application
         void CarsToExcel();
         void AddCarFromConsole();
         void AddCar(Car car);
-        void UpdateCar();
-        void DeleteCar();
+        void UpdateCarFromConsole();
+        void UpdateCar(Car car);
+        void DeleteCarFromConsole();
+        void DeleteCar(Car car);
 
         void DeleteCars();
         void DeleteAllCar();
