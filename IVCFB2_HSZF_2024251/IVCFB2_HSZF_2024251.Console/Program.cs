@@ -109,9 +109,9 @@ namespace IVCFB2_HSZF_2024251
                           "Összes utazás törlése",
                          },
                          [
-                             () => carSharingServie.AddTrip(),
-                             () => carSharingServie.UpdateTrip(),
-                             () => carSharingServie.DeleteTrip(),
+                             () => carSharingServie.AddTripFromConsole(),
+                             () => carSharingServie.UpdateTripFromConsole(),
+                             () => carSharingServie.DeleteTripFromConsole(),
                              () => carSharingServie.DeleteTrips(),
                              () => carSharingServie.TripsToExcel(),
                              () => carSharingServie.DeleteAllTrip(),

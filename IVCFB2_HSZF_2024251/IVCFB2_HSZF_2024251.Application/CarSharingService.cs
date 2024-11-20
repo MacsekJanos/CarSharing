@@ -162,19 +162,32 @@ namespace IVCFB2_HSZF_2024251.Application
         {
             dataProvider.TripsToExcel();
         }
-        public void AddTrip()
+
+        public void AddTripFromConsole()
         {
-            dataProvider.AddTrip();
+            dataProvider.AddTripFromConsole();
+        }
+        public void AddTrip(Trip trip)
+        {
+            dataProvider.AddTrip(trip);
         }
 
-        public void UpdateTrip()
+        public void UpdateTripFromConsole()
         {
-            dataProvider.UpdateTrip();
+            dataProvider.UpdateTripFromConsole();
+        }
+        public void UpdateTrip(Trip trip)
+        {
+            dataProvider.UpdateTrip(trip);
         }
 
-        public void DeleteTrip()
+        public void DeleteTripFromConsole()
         {
-            dataProvider.DeleteTrip();
+            dataProvider.DeleteTripFromConsole();
+        }
+        public void DeleteTrip(Trip trip)
+        {
+            dataProvider.DeleteTrip(trip);
         }
 
         public void DeleteTrips()
