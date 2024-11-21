@@ -39,7 +39,7 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
 
             if (!File.Exists(path))
             {
-                Console.WriteLine("File not found: " + path);
+                Console.WriteLine("File nem található a megadott útnovalon: " + path);
                 return;
             }
 
@@ -80,14 +80,6 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
             }
             dbEvent.OnActionCompleted("Az adatbázis sikeresen feltőltődött");
         }
-        public void Print<T>(IEnumerable<T> data)
-        {
-            int i = 1;
-            foreach (var item in data)
-            {
-                Console.WriteLine($"{i++}. {item?.ToString()}");
-            }
-        }
         public void ToList<T>(T data)
         {
             if (data == null) return;
@@ -115,7 +107,7 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
                 Console.WriteLine(new string('-', 20));
             }
         }
-        public string MostUsedCar()
+        public Car MostUsedCar()
         {
             var mostUsedCar = context.Trips
             .GroupBy(t => t.CarId)
@@ -127,12 +119,21 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
               .OrderByDescending(g => g.TotalDistance)
                .FirstOrDefault();
 
-            Car result = context.Cars.Where(c => c.Id == mostUsedCar.CarId).FirstOrDefault();
-            Console.WriteLine("A legtöbbet futott kocsi: " + result.Model + "Idáig megtett út: " + result.TotalDistance + "Km");
-            return "";
+            if (mostUsedCar == null)
+            {
+                return null;
+            }
+
+            Car result = context.Cars.FirstOrDefault(c => c.Id == mostUsedCar.CarId);
+
+            if (result != null)
+            {
+                Console.WriteLine($"A legtöbbet futott autó: {result.Model}, Idáig megtett út: {mostUsedCar.TotalDistance:F2}Km");
+            }
+            return result;
         }
 
-        public IEnumerable<string> Top10MostPayingCustomer()
+        public IEnumerable<Customer> Top10MostPayingCustomer()
         {
             var mostPayingCustomers = context.Trips
                 .GroupBy(t => t.CustomerId)
@@ -144,12 +145,24 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
                 .OrderByDescending(g => g.TotalPaid)
                 .Take(10);
 
+            var customerNamesWithPayments = context.Customers
+                .Where(c => mostPayingCustomers.Select(m => m.CustomerId).Contains(c.Id))
+                .Select(c => new
+                {
+                    c.Name,
+                    TotalPaid = mostPayingCustomers.First(m => m.CustomerId == c.Id).TotalPaid
+                })
+                    .ToList();
+
             Console.WriteLine("\nA 10 legtöbbet fizető vásárló: \n");
+            int i = 1;
+            foreach (var customer in customerNamesWithPayments)
+            {
+                Console.WriteLine($"{i++}. {customer.Name}, Összesen fizetett: {customer.TotalPaid:F2} euro");
+            }
             return context.Customers
                 .Where(c => mostPayingCustomers.Select(m => m.CustomerId).Contains(c.Id))
-                .Select(c => c.Name)
                 .ToList();
-
 
         }
 
@@ -785,7 +798,6 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
             context.Trips.Remove(trip);
             context.SaveChanges();
         }
-
 
         public void DeleteTrips()
         {

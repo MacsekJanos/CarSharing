@@ -8,10 +8,9 @@ namespace IVCFB2_HSZF_2024251.Application
         //DB
         void DbWipe();
         void DbSeed(string? path = null);
-        void Print<T>(IEnumerable<T> data);
         void ToList<T>(T data);
-        string MostUsedCar();
-        IEnumerable<string> Top10MostPayingCustomer();
+        Car MostUsedCar();
+        IEnumerable<Customer> Top10MostPayingCustomer();
         double AvgDistance();
 
 
@@ -37,13 +36,13 @@ namespace IVCFB2_HSZF_2024251.Application
 
         void CustomersToExcel();
         void AddCustomerFromConsole();
-        void AddCustomer(Customer customer);
+        bool AddCustomer(Customer customer);
 
         void UpdateCustomerFromConsole();
-        void UpdateCustomer(Customer customer);
+        bool UpdateCustomer(Customer customer);
 
         void DeleteCustomerFromConsole();
-        void DeleteCustomer(Customer customer);
+        bool DeleteCustomer(Customer customer);
         void DeleteCustomers();
 
         void DeleteAllCustomer();
@@ -54,13 +53,13 @@ namespace IVCFB2_HSZF_2024251.Application
 
         void TripsToExcel();
         void AddTripFromConsole();
-        void AddTrip(Trip trip);
+        bool AddTrip(Trip trip);
 
         void UpdateTripFromConsole();
-        void UpdateTrip(Trip trip);
+        bool UpdateTrip(Trip trip);
 
         void DeleteTripFromConsole();
-        void DeleteTrip(Trip trip);
+        bool DeleteTrip(Trip trip);
         void DeleteTrips();
         void DeleteAllTrip();
     }

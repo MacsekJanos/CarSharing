@@ -26,22 +26,17 @@ namespace IVCFB2_HSZF_2024251.Application
             dataProvider.DbSeed();
         }
 
-        public void Print<T>(IEnumerable<T> data)
-        {
-            dataProvider.Print(data);
-        }
-
         public void ToList<T>(T data)
         {
             dataProvider.ToList<T>(data);
         }
 
-        public string MostUsedCar()
+        public Car MostUsedCar()
         {
             return dataProvider.MostUsedCar();
         }
 
-        public IEnumerable<string> Top10MostPayingCustomer()
+        public IEnumerable<Customer> Top10MostPayingCustomer()
         {
             return dataProvider.Top10MostPayingCustomer();
         }
@@ -141,27 +136,43 @@ namespace IVCFB2_HSZF_2024251.Application
         {
             dataProvider.AddCustomerFromConsole();
         }
-        public void AddCustomer(Customer customer)
+        public bool AddCustomer(Customer customer)
         {
+            if (customer == null || string.IsNullOrEmpty(customer.Name) || customer.Balance < 0)
+            {
+                return false;
+            }
+
             dataProvider.AddCustomer(customer);
+            return true;
         }
 
         public void UpdateCustomerFromConsole()
         {
             dataProvider.UpdateCustomerFromConsole();
         }
-        public void UpdateCustomer(Customer customer)
+        public bool UpdateCustomer(Customer customer)
         {
+            if (customer == null || string.IsNullOrEmpty(customer.Name) || customer.Balance < 0)
+            {
+                return false;
+            }
             dataProvider.UpdateCustomer(customer);
+            return true;
         }
 
         public void DeleteCustomerFromConsole()
         {
             dataProvider.DeleteCustomerFromConsole();
         }
-        public void DeleteCustomer(Customer customer)
+        public bool DeleteCustomer(Customer customer)
         {
+            if (customer == null)
+            {
+                return false;
+            }
             dataProvider.DeleteCustomer(customer);
+            return true;
         }
 
         public void DeleteCustomers()
@@ -194,27 +205,61 @@ namespace IVCFB2_HSZF_2024251.Application
         {
             dataProvider.AddTripFromConsole();
         }
-        public void AddTrip(Trip trip)
+
+        public bool AddTrip(Trip trip)
         {
+            if (trip == null || trip.Distance <= 0 || trip.Cost <= 0)
+            {
+                return false;
+            }
+
+            var customer = dataProvider.GetCustomerById(trip.CustomerId);
+            var car = dataProvider.GetCarById(trip.CarId);
+
+            if (customer == null || car == null || customer.Balance < trip.Cost)
+            {
+                return false;
+            }
+
             dataProvider.AddTrip(trip);
+            return true;
         }
 
         public void UpdateTripFromConsole()
         {
             dataProvider.UpdateTripFromConsole();
         }
-        public void UpdateTrip(Trip trip)
+        public bool UpdateTrip(Trip trip)
         {
-            dataProvider.UpdateTrip(trip);
+            if (trip == null || trip.Distance <= 0 || trip.Cost <= 0)
+            {
+                return false;
+            }
+
+            var customer = dataProvider.GetCustomerById(trip.CustomerId);
+            var car = dataProvider.GetCarById(trip.CarId);
+
+            if (customer == null || car == null || customer.Balance < trip.Cost)
+            {
+                return false;
+            }
+
+            dataProvider.UpdateTripFromConsole();
+            return true;
         }
 
         public void DeleteTripFromConsole()
         {
             dataProvider.DeleteTripFromConsole();
         }
-        public void DeleteTrip(Trip trip)
+        public bool DeleteTrip(Trip trip)
         {
+            if (trip == null)
+            {
+                return false;
+            }
             dataProvider.DeleteTrip(trip);
+            return true;
         }
 
         public void DeleteTrips()

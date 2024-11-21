@@ -125,7 +125,7 @@ namespace IVCFB2_HSZF_2024251
                       },
                       [
                           () => carSharingServie.MostUsedCar(),
-                          () => carSharingServie.Print(carSharingServie.Top10MostPayingCustomer()),
+                          () => carSharingServie.Top10MostPayingCustomer(),
                           () => carSharingServie.AvgDistance(),
                       ]),
                       () => WipeDatabase(carSharingServie)
