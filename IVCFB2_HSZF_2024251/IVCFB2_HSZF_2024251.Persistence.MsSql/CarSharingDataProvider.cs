@@ -34,7 +34,7 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
         {
             if (string.IsNullOrEmpty(path))
             {
-                path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "carsharing.xml");
+                path = Path.Combine(Directory.GetCurrentDirectory(), "carsharing.xml");
             }
 
             if (!File.Exists(path))

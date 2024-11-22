@@ -1,8 +1,9 @@
 ﻿namespace IVCFB2_HSZF_2024251.Persistence.MsSql
 {
-    public class DBEvent
+    public class DBEvent : EventArgs
     {
         public event EventHandler<string>? ActionCompleted;
+
         public DBEvent()
         {
             ActionCompleted += (sender, message) => Console.WriteLine(message);
