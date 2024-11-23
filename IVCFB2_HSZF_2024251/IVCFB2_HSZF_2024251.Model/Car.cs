@@ -11,6 +11,13 @@ namespace IVCFB2_HSZF_2024251.Model
         public string Model { get; set; }
         public double TotalDistance { get; set; }
         public double DistanceSinceLastMaintenance { get; set; }
+
+        public virtual ICollection<Trip> Trips { get; set; }
+
+        public Car()
+        {
+            Trips = new HashSet<Trip>();
+        }
     }
 
 }

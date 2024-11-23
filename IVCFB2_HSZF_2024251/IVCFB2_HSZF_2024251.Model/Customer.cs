@@ -10,6 +10,12 @@ namespace IVCFB2_HSZF_2024251.Model
         public int Id { get; set; }
         public string Name { get; set; }
         public double Balance { get; set; }
+        public virtual ICollection<Trip> Trips { get; set; }
+
+        public Customer()
+        {
+            Trips = new HashSet<Trip>();
+        }
     }
 
 }
