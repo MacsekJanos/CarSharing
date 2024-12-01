@@ -208,32 +208,6 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
             dbEvent.OnActionCompleted("Az autók adatai sikeresen exportálva lettek a cars.csv fájlba.");
         }
 
-        public void AddCarFromConsole()
-        {
-            Console.WriteLine("Adja meg a modelt:");
-            string model = Console.ReadLine();
-            if (string.IsNullOrEmpty(model))
-            {
-                Console.WriteLine("Érvénytelen bemenet. A modell nem lehet üres.");
-                return;
-            }
-            Console.WriteLine("Adja meg az eddig megtett távot:");
-            string distanceInput = Console.ReadLine();
-            if (string.IsNullOrEmpty(distanceInput) || !double.TryParse(distanceInput, out double totalDistance) || totalDistance < 0)
-            {
-                Console.WriteLine("Érvénytelen bemenet. A távnak nullánál nem kisebb számnak kell lennie.");
-                return;
-            }
-            var car = new Car
-            {
-                Model = model,
-                TotalDistance = totalDistance,
-                DistanceSinceLastMaintenance = 0
-            };
-            dbEvent.OnActionCompleted("Az új autó sikeresen bekerült a flottába!");
-            AddCar(car);
-        }
-
         public void AddCar(Car car)
         {
             if (car == null || string.IsNullOrEmpty(car.Model) || car.TotalDistance < 0)
@@ -293,25 +267,6 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
             return;
         }
 
-        public void DeleteCarFromConsole()
-        {
-            Console.WriteLine("Válassza ki a törölni kívánt autót ID alapján:");
-            var cars = context.Cars.ToList();
-            ToList(cars);
-            if (!int.TryParse(Console.ReadLine(), out int carId) || !cars.Any(c => c.Id == carId))
-            {
-                dbEvent.OnActionCompleted("Érvénytelen autó ID.");
-                return;
-            }
-            var car = context.Cars.Find(carId);
-            if (car == null)
-            {
-                dbEvent.OnActionCompleted("Nem található autó a megadott ID-val.");
-                return;
-            }
-            DeleteCar(car);
-            dbEvent.OnActionCompleted("Az autó sikeresen törölve lett!");
-        }
 
         public void DeleteCar(Car car)
         {

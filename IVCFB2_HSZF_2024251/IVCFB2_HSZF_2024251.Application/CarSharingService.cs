@@ -62,10 +62,6 @@ namespace IVCFB2_HSZF_2024251.Application
         {
             dataProvider.CarsToExcel();
         }
-        public void AddCarFromConsole()
-        {
-            dataProvider.AddCarFromConsole();
-        }
         public bool AddCar(Car car)
         {
             if (car == null || string.IsNullOrEmpty(car.Model) || car.TotalDistance < 0)
@@ -90,10 +86,7 @@ namespace IVCFB2_HSZF_2024251.Application
             dataProvider.UpdateCar(car);
             return true;
         }
-        public void DeleteCarFromConsole()
-        {
-            dataProvider.DeleteCarFromConsole();
-        }
+
         public bool DeleteCar(Car car)
         {
             if (car == null)
