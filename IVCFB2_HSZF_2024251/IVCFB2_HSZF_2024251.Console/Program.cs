@@ -27,6 +27,8 @@ namespace IVCFB2_HSZF_2024251
             using IServiceScope serviceScope = host.Services.CreateScope();
             var carSharingServie = host.Services.GetService<ICarSharingService>();
 
+            //Cars
+
             void AddCarFromConsole()
             {
                 Console.WriteLine("Adja meg a modelt:");
@@ -52,6 +54,42 @@ namespace IVCFB2_HSZF_2024251
                 dbEvent.OnActionCompleted("Az új autó sikeresen bekerült a flottába!");
                 carSharingServie.AddCar(car);
             }
+            void UpdateCarFromConsole()
+            {
+                Console.WriteLine("Válasszon autót ID alapján:");
+                var cars = carSharingServie.GetAllCars().ToList();
+                carSharingServie.ToList(cars);
+                if (!int.TryParse(Console.ReadLine(), out int carId) || !cars.Any(c => c.Id == carId))
+                {
+                    dbEvent.OnActionCompleted("Érvénytelen autó ID.");
+                    return;
+                }
+                var car = carSharingServie.GetCarById(carId);
+                if (car == null)
+                {
+                    dbEvent.OnActionCompleted("Nem található autó a megadott ID-val.");
+                    return;
+                }
+                Console.WriteLine("Adja meg az új modellt:");
+                string newModel = Console.ReadLine();
+                Console.WriteLine("Adja meg az eddig megtett távot:");
+                if (!double.TryParse(Console.ReadLine(), out double totalDistance) || totalDistance < 0)
+                {
+                    dbEvent.OnActionCompleted("Érvénytelen bemenet, a távnak nullánál nem kisebb számnak kell lennie.");
+                    return;
+                }
+                Console.WriteLine("Adja meg a szerviz óta megtett távot:");
+                if (!double.TryParse(Console.ReadLine(), out double distanceSinceLastMaintenance) || distanceSinceLastMaintenance <= 0)
+                {
+                    dbEvent.OnActionCompleted("Érvénytelen bemenet, a távnak nullánál nem kisebb számnak kell lennie.");
+                    return;
+                }
+                car.Model = newModel;
+                car.TotalDistance = totalDistance;
+                car.DistanceSinceLastMaintenance = distanceSinceLastMaintenance > 200 ? 0 : distanceSinceLastMaintenance;
+                carSharingServie.UpdateCar(car);
+                dbEvent.OnActionCompleted("Az autó sikeresen frissítve lett!");
+            }
             void DeleteCarFromConsole()
             {
                 Console.WriteLine("Válassza ki a törölni kívánt autót ID alapján:");
@@ -71,6 +109,99 @@ namespace IVCFB2_HSZF_2024251
                 carSharingServie.DeleteCar(car);
                 dbEvent.OnActionCompleted("Az autó sikeresen törölve lett!");
             }
+
+            //Customers
+            void AddCustomerFromConsole()
+            {
+                Console.WriteLine("Adja meg a vásárló nevét:");
+                string name = Console.ReadLine();
+
+                if (string.IsNullOrEmpty(name))
+                {
+                    dbEvent.OnActionCompleted("Érvénytelen bemenet, a név nem lehet üres.");
+                    return;
+                }
+
+                Console.WriteLine("Adja meg a vásárló egyenlegét:");
+                if (!double.TryParse(Console.ReadLine(), out double balance) || balance < 0)
+                {
+                    dbEvent.OnActionCompleted("Érvénytelen bemenet, az egyenlegnek nullánál nagyobb számnak kell lennie.");
+                    return;
+                }
+
+                var customer = new Customer
+                {
+                    Name = name,
+                    Balance = balance
+                };
+
+                carSharingServie.AddCustomer(customer);
+                dbEvent.OnActionCompleted("Az új vásárló sikeresen fel lett véve!");
+            }
+            void UpdateCustomerFromConsole()
+            {
+                Console.WriteLine("Válasszon vásárlót ID alapján:");
+                var customers = carSharingServie.GetAllCustomers().ToList();
+                carSharingServie.ToList(customers);
+
+                if (!int.TryParse(Console.ReadLine(), out int customerId) || !customers.Any(c => c.Id == customerId))
+                {
+                    dbEvent.OnActionCompleted("Érvénytelen vásárló ID.");
+                    return;
+                }
+
+                var customer = carSharingServie.GetCustomerById(customerId);
+                if (customer == null)
+                {
+                    dbEvent.OnActionCompleted("Nem található vásárló a megadott ID-val.");
+                    return;
+                }
+
+                Console.WriteLine("Adja meg az új nevet:");
+                string newName = Console.ReadLine();
+
+                if (string.IsNullOrEmpty(newName))
+                {
+                    dbEvent.OnActionCompleted("Érvénytelen bemenet, a név nem lehet üres.");
+                    return;
+                }
+
+                Console.WriteLine("Adja meg az új egyenleget:");
+                if (!double.TryParse(Console.ReadLine(), out double balance) || balance < 0)
+                {
+                    dbEvent.OnActionCompleted("Érvénytelen bemenet, az egyenlegnek nullánál nagyobb számnak kell lennie.");
+                    return;
+                }
+
+                customer.Name = newName;
+                customer.Balance = balance;
+
+                carSharingServie.UpdateCustomer(customer);
+                dbEvent.OnActionCompleted("A vásárló adatai sikeresen frissültek!");
+            }
+            void DeleteCustomerFromConsole()
+            {
+                Console.WriteLine("Válassza ki a törölni kívánt vásárlót ID alapján:");
+                var customers = carSharingServie.GetAllCustomers().ToList();
+                carSharingServie.ToList(customers);
+
+                if (!int.TryParse(Console.ReadLine(), out int customerId) || !customers.Any(c => c.Id == customerId))
+                {
+                    dbEvent.OnActionCompleted("Érvénytelen vásárló ID.");
+                    return;
+                }
+
+                var customer = carSharingServie.GetCustomerById(customerId);
+                if (customer == null)
+                {
+                    dbEvent.OnActionCompleted("Nem található vásárló a megadott ID-val.");
+                    return;
+                }
+
+                carSharingServie.DeleteCustomer(customer);
+                dbEvent.OnActionCompleted("A vásárló sikeresen törölve lett!");
+            }
+
 
             DisplayMenu(
             new string[]
@@ -119,7 +250,7 @@ namespace IVCFB2_HSZF_2024251
                          },
                          [
                              () => AddCarFromConsole(),
-                             () => carSharingServie.UpdateCarFromConsole(),
+                             () => UpdateCarFromConsole(),
                              () => DeleteCarFromConsole(),
                              () => carSharingServie.DeleteCars(),
                              () => carSharingServie.CarsToExcel(),
@@ -137,9 +268,9 @@ namespace IVCFB2_HSZF_2024251
                           "Összes vásárló törlése",
                          },
                          [
-                             () => carSharingServie.AddCustomerFromConsole(),
-                             () => carSharingServie.UpdateCustomerFromConsole(),
-                             () => carSharingServie.DeleteCustomerFromConsole(),
+                             () => AddCustomerFromConsole(),
+                             () => UpdateCustomerFromConsole(),
+                             () => DeleteCustomerFromConsole(),
                              () => carSharingServie.DeleteCustomers(),
                              () => carSharingServie.CustomersToExcel(),
                              () => carSharingServie.DeleteAllCustomer(),

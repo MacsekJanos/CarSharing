@@ -21,7 +21,6 @@ namespace IVCFB2_HSZF_2024251.Application
 
         void CarsToExcel();
         bool AddCar(Car car);
-        void UpdateCarFromConsole();
         bool UpdateCar(Car car);
         bool DeleteCar(Car car);
 
@@ -33,13 +32,8 @@ namespace IVCFB2_HSZF_2024251.Application
         Customer GetCustomerById(int id);
 
         void CustomersToExcel();
-        void AddCustomerFromConsole();
         bool AddCustomer(Customer customer);
-
-        void UpdateCustomerFromConsole();
         bool UpdateCustomer(Customer customer);
-
-        void DeleteCustomerFromConsole();
         bool DeleteCustomer(Customer customer);
         void DeleteCustomers();
 

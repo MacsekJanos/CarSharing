@@ -9,13 +9,10 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
 
         void CustomersToExcel();
 
-        void AddCustomerFromConsole();
         void AddCustomer(Customer customer);
 
-        void UpdateCustomerFromConsole();
         void UpdateCustomer(Customer customer);
 
-        void DeleteCustomerFromConsole();
         void DeleteCustomer(Customer customer);
 
         void DeleteCustomers();

@@ -72,10 +72,6 @@ namespace IVCFB2_HSZF_2024251.Application
             return true;
         }
 
-        public void UpdateCarFromConsole()
-        {
-            dataProvider.UpdateCarFromConsole();
-        }
 
         public bool UpdateCar(Car car)
         {
@@ -125,10 +121,6 @@ namespace IVCFB2_HSZF_2024251.Application
             dataProvider.CustomersToExcel();
         }
 
-        public void AddCustomerFromConsole()
-        {
-            dataProvider.AddCustomerFromConsole();
-        }
         public bool AddCustomer(Customer customer)
         {
             if (customer == null || string.IsNullOrEmpty(customer.Name) || customer.Balance < 0)
@@ -140,10 +132,6 @@ namespace IVCFB2_HSZF_2024251.Application
             return true;
         }
 
-        public void UpdateCustomerFromConsole()
-        {
-            dataProvider.UpdateCustomerFromConsole();
-        }
         public bool UpdateCustomer(Customer customer)
         {
             if (customer == null || string.IsNullOrEmpty(customer.Name) || customer.Balance < 0)
@@ -152,11 +140,6 @@ namespace IVCFB2_HSZF_2024251.Application
             }
             dataProvider.UpdateCustomer(customer);
             return true;
-        }
-
-        public void DeleteCustomerFromConsole()
-        {
-            dataProvider.DeleteCustomerFromConsole();
         }
         public bool DeleteCustomer(Customer customer)
         {

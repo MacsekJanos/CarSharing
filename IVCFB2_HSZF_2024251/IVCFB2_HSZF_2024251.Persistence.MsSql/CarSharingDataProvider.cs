@@ -219,43 +219,6 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
             context.SaveChanges();
         }
 
-        public void UpdateCarFromConsole()
-        {
-            Console.WriteLine("Válasszon autót ID alapján:");
-            var cars = context.Cars.ToList();
-            ToList(cars);
-            if (!int.TryParse(Console.ReadLine(), out int carId) || !cars.Any(c => c.Id == carId))
-            {
-                dbEvent.OnActionCompleted("Érvénytelen autó ID.");
-                return;
-            }
-            var car = context.Cars.Find(carId);
-            if (car == null)
-            {
-                dbEvent.OnActionCompleted("Nem található autó a megadott ID-val.");
-                return;
-            }
-            Console.WriteLine("Adja meg az új modellt:");
-            string newModel = Console.ReadLine();
-            Console.WriteLine("Adja meg az eddig megtett távot:");
-            if (!double.TryParse(Console.ReadLine(), out double totalDistance) || totalDistance < 0)
-            {
-                dbEvent.OnActionCompleted("Érvénytelen bemenet, a távnak nullánál nem kisebb számnak kell lennie.");
-                return;
-            }
-            Console.WriteLine("Adja meg a szerviz óta megtett távot:");
-            if (!double.TryParse(Console.ReadLine(), out double distanceSinceLastMaintenance) || distanceSinceLastMaintenance <= 0)
-            {
-                dbEvent.OnActionCompleted("Érvénytelen bemenet, a távnak nullánál nem kisebb számnak kell lennie.");
-                return;
-            }
-            car.Model = newModel;
-            car.TotalDistance = totalDistance;
-            car.DistanceSinceLastMaintenance = distanceSinceLastMaintenance > 200 ? 0 : distanceSinceLastMaintenance;
-            UpdateCar(car);
-            dbEvent.OnActionCompleted("Az autó sikeresen frissítve lett!");
-        }
-
         public void UpdateCar(Car car)
         {
             if (car == null || string.IsNullOrEmpty(car.Model) || car.TotalDistance < 0 || car.DistanceSinceLastMaintenance < 0)
@@ -343,33 +306,6 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
 
             dbEvent.OnActionCompleted("A vásárlók adatai sikeresen exportálva lettek a customers.csv fájlba.");
         }
-        public void AddCustomerFromConsole()
-        {
-            Console.WriteLine("Adja meg a vásárló nevét:");
-            string name = Console.ReadLine();
-
-            if (string.IsNullOrEmpty(name))
-            {
-                dbEvent.OnActionCompleted("Érvénytelen bemenet, a név nem lehet üres.");
-                return;
-            }
-
-            Console.WriteLine("Adja meg a vásárló egyenlegét:");
-            if (!double.TryParse(Console.ReadLine(), out double balance) || balance < 0)
-            {
-                dbEvent.OnActionCompleted("Érvénytelen bemenet, az egyenlegnek nullánál nagyobb számnak kell lennie.");
-                return;
-            }
-
-            var customer = new Customer
-            {
-                Name = name,
-                Balance = balance
-            };
-
-            AddCustomer(customer);
-            dbEvent.OnActionCompleted("Az új vásárló sikeresen fel lett véve!");
-        }
 
         public void AddCustomer(Customer customer)
         {
@@ -380,48 +316,6 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
 
             context.Customers.Add(customer);
             context.SaveChanges();
-        }
-
-        public void UpdateCustomerFromConsole()
-        {
-            Console.WriteLine("Válasszon vásárlót ID alapján:");
-            var customers = context.Customers.ToList();
-            ToList(customers);
-
-            if (!int.TryParse(Console.ReadLine(), out int customerId) || !customers.Any(c => c.Id == customerId))
-            {
-                dbEvent.OnActionCompleted("Érvénytelen vásárló ID.");
-                return;
-            }
-
-            var customer = context.Customers.Find(customerId);
-            if (customer == null)
-            {
-                dbEvent.OnActionCompleted("Nem található vásárló a megadott ID-val.");
-                return;
-            }
-
-            Console.WriteLine("Adja meg az új nevet:");
-            string newName = Console.ReadLine();
-
-            if (string.IsNullOrEmpty(newName))
-            {
-                dbEvent.OnActionCompleted("Érvénytelen bemenet, a név nem lehet üres.");
-                return;
-            }
-
-            Console.WriteLine("Adja meg az új egyenleget:");
-            if (!double.TryParse(Console.ReadLine(), out double balance) || balance < 0)
-            {
-                dbEvent.OnActionCompleted("Érvénytelen bemenet, az egyenlegnek nullánál nagyobb számnak kell lennie.");
-                return;
-            }
-
-            customer.Name = newName;
-            customer.Balance = balance;
-
-            UpdateCustomer(customer);
-            dbEvent.OnActionCompleted("A vásárló adatai sikeresen frissültek!");
         }
 
         public void UpdateCustomer(Customer customer)
@@ -435,28 +329,6 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
             context.SaveChanges();
         }
 
-        public void DeleteCustomerFromConsole()
-        {
-            Console.WriteLine("Válassza ki a törölni kívánt vásárlót ID alapján:");
-            var customers = context.Customers.ToList();
-            ToList(customers);
-
-            if (!int.TryParse(Console.ReadLine(), out int customerId) || !customers.Any(c => c.Id == customerId))
-            {
-                dbEvent.OnActionCompleted("Érvénytelen vásárló ID.");
-                return;
-            }
-
-            var customer = context.Customers.Find(customerId);
-            if (customer == null)
-            {
-                dbEvent.OnActionCompleted("Nem található vásárló a megadott ID-val.");
-                return;
-            }
-
-            DeleteCustomer(customer);
-            dbEvent.OnActionCompleted("A vásárló sikeresen törölve lett!");
-        }
         public void DeleteCustomer(Customer customer)
         {
             if (customer == null)
