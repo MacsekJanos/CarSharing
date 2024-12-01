@@ -44,13 +44,10 @@ namespace IVCFB2_HSZF_2024251.Application
         Trip GetTripById(int id);
 
         void TripsToExcel();
-        void AddTripFromConsole();
         bool AddTrip(Trip trip);
 
-        void UpdateTripFromConsole();
         bool UpdateTrip(Trip trip);
 
-        void DeleteTripFromConsole();
         bool DeleteTrip(Trip trip);
         void DeleteTrips();
         void DeleteAllTrip();

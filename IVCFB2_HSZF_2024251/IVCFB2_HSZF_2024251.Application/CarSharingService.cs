@@ -177,10 +177,6 @@ namespace IVCFB2_HSZF_2024251.Application
             dataProvider.TripsToExcel();
         }
 
-        public void AddTripFromConsole()
-        {
-            dataProvider.AddTripFromConsole();
-        }
 
         public bool AddTrip(Trip trip)
         {
@@ -201,10 +197,6 @@ namespace IVCFB2_HSZF_2024251.Application
             return true;
         }
 
-        public void UpdateTripFromConsole()
-        {
-            dataProvider.UpdateTripFromConsole();
-        }
         public bool UpdateTrip(Trip trip)
         {
             if (trip == null || trip.Distance <= 0 || trip.Cost <= 0)
@@ -220,14 +212,11 @@ namespace IVCFB2_HSZF_2024251.Application
                 return false;
             }
 
-            dataProvider.UpdateTripFromConsole();
+            dataProvider.UpdateTrip(trip);
             return true;
         }
 
-        public void DeleteTripFromConsole()
-        {
-            dataProvider.DeleteTripFromConsole();
-        }
+
         public bool DeleteTrip(Trip trip)
         {
             if (trip == null)

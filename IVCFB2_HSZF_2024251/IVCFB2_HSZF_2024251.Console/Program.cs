@@ -202,6 +202,169 @@ namespace IVCFB2_HSZF_2024251
                 dbEvent.OnActionCompleted("A vásárló sikeresen törölve lett!");
             }
 
+            //Trips
+
+            void AddTripFromConsole()
+            {
+                Console.WriteLine("Válasszon Vásárlót ID alapján:");
+                var customers = carSharingServie.GetAllCustomers().ToList();
+                carSharingServie.ToList(customers);
+                if (!int.TryParse(Console.ReadLine(), out int customerId) || !customers.Any(c => c.Id == customerId))
+                {
+                    dbEvent.OnActionCompleted("Érvénytelen ID.");
+                    return;
+                }
+
+                var selectedCustomer = carSharingServie.GetCustomerById(customerId);
+                if (selectedCustomer.Balance < 40)
+                {
+                    dbEvent.OnActionCompleted("Nincs elég fedezet, a minimum 40 euro.");
+                    return;
+                }
+
+                Console.WriteLine("Válasszon autót ID alapján:");
+                var cars = carSharingServie.GetAllCars().ToList();
+                carSharingServie.ToList(cars);
+                if (!int.TryParse(Console.ReadLine(), out int carId) || !cars.Any(c => c.Id == carId))
+                {
+                    dbEvent.OnActionCompleted("Érvénytelen autó ID.");
+                    return;
+                }
+
+                var selectedCar = carSharingServie.GetCarById(carId);
+
+                Console.WriteLine("Adj meg a tervezett távolságot (km):");
+                if (!double.TryParse(Console.ReadLine(), out double distance) || distance <= 0)
+                {
+                    dbEvent.OnActionCompleted("Érvénytelen táv, az útnak nullánál nem kisebb számnak kell lennie.");
+                    return;
+                }
+
+                double tripCost = 0.5 + (distance * 0.35);
+                if (selectedCustomer.Balance < tripCost)
+                {
+                    dbEvent.OnActionCompleted("Nincs elég fedezet az útra.");
+                    return;
+                }
+
+                var trip = new Trip
+                {
+                    CarId = carId,
+                    CustomerId = customerId,
+                    Distance = distance,
+                    Cost = tripCost
+                };
+
+                carSharingServie.AddTrip(trip);
+
+                dbEvent.OnActionCompleted($"Sikeres út felvétel: Vásárló: {selectedCustomer.Name}, Autó: {selectedCar.Model}, Ár: {trip.Cost} euro, Távolság: {trip.Distance} km.");
+
+                if (selectedCar.DistanceSinceLastMaintenance >= 200 || new Random().Next(1, 101) <= 20)
+                {
+                    dbEvent.OnActionCompleted($"Az autó {selectedCar.Model} szervízt igényelt!");
+                    selectedCar.DistanceSinceLastMaintenance = 0;
+                    carSharingServie.UpdateCar(selectedCar);
+                }
+            }
+
+            void UpdateTripFromConsole()
+            {
+                Console.WriteLine("Válasszon utat ID alapján:");
+                var trips = carSharingServie.GetAllTrips().ToList();
+                carSharingServie.ToList(trips);
+                if (!int.TryParse(Console.ReadLine(), out int tripId) || !trips.Any(t => t.Id == tripId))
+                {
+                    dbEvent.OnActionCompleted("Érvénytelen út ID.");
+                    return;
+                }
+
+                var trip = carSharingServie.GetTripById(tripId);
+                if (trip == null)
+                {
+                    dbEvent.OnActionCompleted("Nem található út a megadott ID-val.");
+                    return;
+                }
+
+                Console.WriteLine("Válasszon Új Vásárlót ID alapján:");
+                var customers = carSharingServie.GetAllCustomers().ToList();
+                carSharingServie.ToList(customers);
+                if (!int.TryParse(Console.ReadLine(), out int customerId) || !customers.Any(c => c.Id == customerId))
+                {
+                    dbEvent.OnActionCompleted("Érvénytelen ID.");
+                    return;
+                }
+
+                var selectedCustomer = carSharingServie.GetCustomerById(customerId);
+                if (selectedCustomer.Balance < 40)
+                {
+                    dbEvent.OnActionCompleted("Nincs elég fedezet, a minimum 40 euro.");
+                    return;
+                }
+
+                Console.WriteLine("Válasszon új autót ID alapján:");
+                var cars = carSharingServie.GetAllCars().ToList();
+                carSharingServie.ToList(cars);
+                if (!int.TryParse(Console.ReadLine(), out int carId) || !cars.Any(c => c.Id == carId))
+                {
+                    dbEvent.OnActionCompleted("Érvénytelen autó ID.");
+                    return;
+                }
+
+                var selectedCar = carSharingServie.GetCarById(carId);
+
+                Console.WriteLine("Adja meg az új távolságot (km):");
+                if (!double.TryParse(Console.ReadLine(), out double distance) || distance <= 0)
+                {
+                    dbEvent.OnActionCompleted("Érvénytelen táv, az útnak nullánál nem kisebb számnak kell lennie.");
+                    return;
+                }
+
+                double tripCost = 0.5 + (distance * 0.35);
+                if (selectedCustomer.Balance < tripCost)
+                {
+                    dbEvent.OnActionCompleted("Nincs elég fedezet az útra.");
+                    return;
+                }
+
+                trip.CarId = carId;
+                trip.CustomerId = customerId;
+                trip.Distance = distance;
+                trip.Cost = tripCost;
+
+                carSharingServie.UpdateTrip(trip);
+
+                dbEvent.OnActionCompleted($"Sikeres út frissítés: Vásárló: {selectedCustomer.Name}, Autó: {selectedCar.Model}, Ár: {trip.Cost} euro, Távolság: {trip.Distance} km.");
+
+                if (selectedCar.DistanceSinceLastMaintenance >= 200 || new Random().Next(1, 101) <= 20)
+                {
+                    dbEvent.OnActionCompleted($"Az autó {selectedCar.Model} szervízt igényelt!");
+                    selectedCar.DistanceSinceLastMaintenance = 0;
+                    carSharingServie.UpdateCar(selectedCar);
+                }
+            }
+
+            void DeleteTripFromConsole()
+            {
+                Console.WriteLine("Válassza ki a törölni kívánt utat ID alapján:");
+                var trips = carSharingServie.GetAllTrips().ToList();
+                carSharingServie.ToList(trips);
+                if (!int.TryParse(Console.ReadLine(), out int tripId) || !trips.Any(t => t.Id == tripId))
+                {
+                    dbEvent.OnActionCompleted("Érvénytelen út ID.");
+                    return;
+                }
+
+                var trip = carSharingServie.GetTripById(tripId);
+                if (trip == null)
+                {
+                    dbEvent.OnActionCompleted("Nem található út a megadott ID-val.");
+                    return;
+                }
+
+                carSharingServie.DeleteTrip(trip);
+                dbEvent.OnActionCompleted("Az út sikeresen törölve lett!");
+            }
+
 
             DisplayMenu(
             new string[]
@@ -288,9 +451,9 @@ namespace IVCFB2_HSZF_2024251
                           "Összes utazás törlése",
                          },
                          [
-                             () => carSharingServie.AddTripFromConsole(),
-                             () => carSharingServie.UpdateTripFromConsole(),
-                             () => carSharingServie.DeleteTripFromConsole(),
+                             () => AddTripFromConsole(),
+                             () => UpdateTripFromConsole(),
+                             () => DeleteTripFromConsole(),
                              () => carSharingServie.DeleteTrips(),
                              () => carSharingServie.TripsToExcel(),
                              () => carSharingServie.DeleteAllTrip(),
