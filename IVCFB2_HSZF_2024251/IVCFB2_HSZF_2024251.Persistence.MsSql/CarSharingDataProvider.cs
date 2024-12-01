@@ -242,29 +242,29 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
 
         }
 
-        public void DeleteCars()
-        {
-            Console.WriteLine("Válassza ki a törölni kívánt autókat ID alapján, vesszővel elválasztva:");
-            var cars = context.Cars.ToList();
-            ToList(cars);
-            string input = Console.ReadLine();
-            var carIds = input.Split(',')
-                              .Select(id => int.TryParse(id.Trim(), out int carId) ? carId : (int?)null)
-                              .Where(id => id.HasValue)
-                              .Select(id => id.Value)
-                              .ToList();
+        //public void DeleteCars()
+        //{
+        //    Console.WriteLine("Válassza ki a törölni kívánt autókat ID alapján, vesszővel elválasztva:");
+        //    var cars = context.Cars.ToList();
+        //    ToList(cars);
+        //    string input = Console.ReadLine();
+        //    var carIds = input.Split(',')
+        //                      .Select(id => int.TryParse(id.Trim(), out int carId) ? carId : (int?)null)
+        //                      .Where(id => id.HasValue)
+        //                      .Select(id => id.Value)
+        //                      .ToList();
 
-            if (!carIds.Any() || !carIds.All(id => cars.Any(c => c.Id == id)))
-            {
-                dbEvent.OnActionCompleted("Érvénytelen autó ID-k.");
-                return;
-            }
+        //    if (!carIds.Any() || !carIds.All(id => cars.Any(c => c.Id == id)))
+        //    {
+        //        dbEvent.OnActionCompleted("Érvénytelen autó ID-k.");
+        //        return;
+        //    }
 
-            var carsToDelete = context.Cars.Where(c => carIds.Contains(c.Id)).ToList();
-            context.Cars.RemoveRange(carsToDelete);
-            context.SaveChanges();
-            dbEvent.OnActionCompleted("Az autók sikeresen törölve lettek!");
-        }
+        //    var carsToDelete = context.Cars.Where(c => carIds.Contains(c.Id)).ToList();
+        //    context.Cars.RemoveRange(carsToDelete);
+        //    context.SaveChanges();
+        //    dbEvent.OnActionCompleted("Az autók sikeresen törölve lettek!");
+        //}
 
         public void DeleteAllCar()
         {
@@ -340,30 +340,30 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
             context.SaveChanges();
         }
 
-        public void DeleteCustomers()
-        {
-            Console.WriteLine("Válassza ki a törölni kívánt vásárlókat ID alapján, vesszővel elválasztva:");
-            var customers = context.Customers.ToList();
-            ToList(customers);
+        //public void DeleteCustomers()
+        //{
+        //    Console.WriteLine("Válassza ki a törölni kívánt vásárlókat ID alapján, vesszővel elválasztva:");
+        //    var customers = context.Customers.ToList();
+        //    ToList(customers);
 
-            string input = Console.ReadLine();
-            var customerIds = input.Split(',')
-                                   .Select(id => int.TryParse(id.Trim(), out int customerId) ? customerId : (int?)null)
-                                   .Where(id => id.HasValue)
-                                   .Select(id => id.Value)
-                                   .ToList();
+        //    string input = Console.ReadLine();
+        //    var customerIds = input.Split(',')
+        //                           .Select(id => int.TryParse(id.Trim(), out int customerId) ? customerId : (int?)null)
+        //                           .Where(id => id.HasValue)
+        //                           .Select(id => id.Value)
+        //                           .ToList();
 
-            if (!customerIds.Any() || !customerIds.All(id => customers.Any(c => c.Id == id)))
-            {
-                dbEvent.OnActionCompleted("Érvénytelen vásárló ID-k.");
-                return;
-            }
+        //    if (!customerIds.Any() || !customerIds.All(id => customers.Any(c => c.Id == id)))
+        //    {
+        //        dbEvent.OnActionCompleted("Érvénytelen vásárló ID-k.");
+        //        return;
+        //    }
 
-            var customersToDelete = context.Customers.Where(c => customerIds.Contains(c.Id)).ToList();
-            context.Customers.RemoveRange(customersToDelete);
-            context.SaveChanges();
-            dbEvent.OnActionCompleted("A vásárlók sikeresen törölve lettek!");
-        }
+        //    var customersToDelete = context.Customers.Where(c => customerIds.Contains(c.Id)).ToList();
+        //    context.Customers.RemoveRange(customersToDelete);
+        //    context.SaveChanges();
+        //    dbEvent.OnActionCompleted("A vásárlók sikeresen törölve lettek!");
+        //}
         public void DeleteAllCustomer()
         {
             context.Customers.RemoveRange(context.Customers);
@@ -466,30 +466,30 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
             context.SaveChanges();
         }
 
-        public void DeleteTrips()
-        {
-            Console.WriteLine("Válassza ki a törölni kívánt utakat ID alapján, vesszővel elválasztva:");
-            var trips = context.Trips.ToList();
-            ToList(trips);
+        //public void DeleteTrips()
+        //{
+        //    Console.WriteLine("Válassza ki a törölni kívánt utakat ID alapján, vesszővel elválasztva:");
+        //    var trips = context.Trips.ToList();
+        //    ToList(trips);
 
-            string input = Console.ReadLine();
-            var tripIds = input.Split(',')
-                               .Select(id => int.TryParse(id.Trim(), out int tripId) ? tripId : (int?)null)
-                               .Where(id => id.HasValue)
-                               .Select(id => id.Value)
-                               .ToList();
+        //    string input = Console.ReadLine();
+        //    var tripIds = input.Split(',')
+        //                       .Select(id => int.TryParse(id.Trim(), out int tripId) ? tripId : (int?)null)
+        //                       .Where(id => id.HasValue)
+        //                       .Select(id => id.Value)
+        //                       .ToList();
 
-            if (!tripIds.Any() || !tripIds.All(id => trips.Any(t => t.Id == id)))
-            {
-                dbEvent.OnActionCompleted("Érvénytelen út ID-k.");
-                return;
-            }
+        //    if (!tripIds.Any() || !tripIds.All(id => trips.Any(t => t.Id == id)))
+        //    {
+        //        dbEvent.OnActionCompleted("Érvénytelen út ID-k.");
+        //        return;
+        //    }
 
-            var tripsToDelete = context.Trips.Where(t => tripIds.Contains(t.Id)).ToList();
-            context.Trips.RemoveRange(tripsToDelete);
-            context.SaveChanges();
-            dbEvent.OnActionCompleted("Az utak sikeresen törölve lettek!");
-        }
+        //    var tripsToDelete = context.Trips.Where(t => tripIds.Contains(t.Id)).ToList();
+        //    context.Trips.RemoveRange(tripsToDelete);
+        //    context.SaveChanges();
+        //    dbEvent.OnActionCompleted("Az utak sikeresen törölve lettek!");
+        //}
         public void DeleteAllTrip()
         {
             context.Trips.RemoveRange(context.Trips);

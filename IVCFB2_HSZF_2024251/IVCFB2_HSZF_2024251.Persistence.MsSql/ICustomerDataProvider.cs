@@ -15,7 +15,7 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
 
         void DeleteCustomer(Customer customer);
 
-        void DeleteCustomers();
+        //void DeleteCustomers();
         void DeleteAllCustomer();
     }
 }

@@ -24,7 +24,7 @@ namespace IVCFB2_HSZF_2024251.Application
         bool UpdateCar(Car car);
         bool DeleteCar(Car car);
 
-        void DeleteCars();
+        //void DeleteCars();
         void DeleteAllCar();
 
         //Customers
@@ -35,7 +35,7 @@ namespace IVCFB2_HSZF_2024251.Application
         bool AddCustomer(Customer customer);
         bool UpdateCustomer(Customer customer);
         bool DeleteCustomer(Customer customer);
-        void DeleteCustomers();
+        //void DeleteCustomers();
 
         void DeleteAllCustomer();
 
@@ -49,7 +49,7 @@ namespace IVCFB2_HSZF_2024251.Application
         bool UpdateTrip(Trip trip);
 
         bool DeleteTrip(Trip trip);
-        void DeleteTrips();
+        //void DeleteTrips();
         void DeleteAllTrip();
     }
 }

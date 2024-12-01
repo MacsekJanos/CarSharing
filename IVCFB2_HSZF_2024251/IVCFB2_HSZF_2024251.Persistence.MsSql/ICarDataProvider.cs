@@ -12,7 +12,7 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
         void UpdateCar(Car car);
         void DeleteCar(Car car);
 
-        void DeleteCars();
+        //void DeleteCars();
         void DeleteAllCar();
     }
 }

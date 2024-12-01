@@ -27,6 +27,109 @@ namespace IVCFB2_HSZF_2024251
             using IServiceScope serviceScope = host.Services.CreateScope();
             var carSharingServie = host.Services.GetService<ICarSharingService>();
 
+            DisplayMenu(
+            new string[]
+            {
+            "Bolvasás",
+            "Listás nézetek",
+            "Adatbázis műveletek"
+            },
+            [
+              () => DisplayMenu(new string[]{
+                "Adatok beolvasása xml-ből"
+                },
+                [
+                () => SeedDatabase(carSharingServie)
+                ]
+                ),
+              () => DisplayMenu(new string[]
+                {
+                    "Autók listázása",
+                    "Vásárlók listázása",
+                    "Utazások listázása",
+                },
+                [
+                    () => carSharingServie.ToList(carSharingServie.GetAllCars()),
+                    () => carSharingServie.ToList(carSharingServie.GetAllCustomers()),
+                    () => carSharingServie.ToList(carSharingServie.GetAllTrips())
+                ]
+                ),
+              () => DisplayMenu(
+                  new string[]{
+                      "Autók",
+                      "Vásárlók",
+                      "Utazások",
+                      "Lekérdezések",
+                      "Adatbázis törlése"
+                  },
+                  [
+                      () => DisplayMenu(new string[]
+                         {
+                          "Új autó felvétele",
+                          "Autó módosítása",
+                          "Autó törlése",
+                          "Autók exportálása",
+                          "Összes autó törlése",
+                         },
+                         [
+                             () => AddCarFromConsole(),
+                             () => UpdateCarFromConsole(),
+                             () => DeleteCarFromConsole(),
+                             () => carSharingServie.CarsToExcel(),
+                             () => carSharingServie.DeleteAllCar(),
+                         ]
+                          ),
+
+                      () => DisplayMenu(new string[]
+                         {
+                          "Új vásárló felvétele",
+                          "Vásárló módosítása",
+                          "Vásárló törlése",
+                          "Vásárlók exportálása",
+                          "Összes vásárló törlése",
+                         },
+                         [
+                             () => AddCustomerFromConsole(),
+                             () => UpdateCustomerFromConsole(),
+                             () => DeleteCustomerFromConsole(),
+                             () => carSharingServie.CustomersToExcel(),
+                             () => carSharingServie.DeleteAllCustomer(),
+
+                         ]
+                          ),
+
+                      () => DisplayMenu(new string[]
+                         {
+                          "Új utazás",
+                          "Utazás módosítása",
+                          "Utazás törlése",
+                          "Utazások exportálása",
+                          "Összes utazás törlése",
+                         },
+                         [
+                             () => AddTripFromConsole(),
+                             () => UpdateTripFromConsole(),
+                             () => DeleteTripFromConsole(),
+                             () => carSharingServie.TripsToExcel(),
+                             () => carSharingServie.DeleteAllTrip(),
+                         ]
+                          ),
+                           () => DisplayMenu(new string[]
+                      {
+                          "Legtöbbet futott jármű",
+                          "Top 10 legtöbbet fizető ügyfél",
+                          "Autók átlagos futása",
+                      },
+                      [
+                          () => carSharingServie.MostUsedCar(),
+                          () => carSharingServie.Top10MostPayingCustomer(),
+                          () => carSharingServie.AvgDistance(),
+                      ]),
+                      () => WipeDatabase(carSharingServie)
+                  ]
+               )
+            ]
+            );
             //Cars
 
             void AddCarFromConsole()
@@ -266,7 +369,6 @@ namespace IVCFB2_HSZF_2024251
                     carSharingServie.UpdateCar(selectedCar);
                 }
             }
-
             void UpdateTripFromConsole()
             {
                 Console.WriteLine("Válasszon utat ID alapján:");
@@ -342,7 +444,6 @@ namespace IVCFB2_HSZF_2024251
                     carSharingServie.UpdateCar(selectedCar);
                 }
             }
-
             void DeleteTripFromConsole()
             {
                 Console.WriteLine("Válassza ki a törölni kívánt utat ID alapján:");
@@ -364,117 +465,6 @@ namespace IVCFB2_HSZF_2024251
                 carSharingServie.DeleteTrip(trip);
                 dbEvent.OnActionCompleted("Az út sikeresen törölve lett!");
             }
-
-
-            DisplayMenu(
-            new string[]
-            {
-            "Bolvasás",
-            "Listás nézetek",
-            "Adatbázis műveletek"
-            },
-            [
-              () => DisplayMenu(new string[]{
-                "Adatok beolvasása xml-ből"
-                },
-                [
-                () => SeedDatabase(carSharingServie)
-                ]
-                ),
-              () => DisplayMenu(new string[]
-                {
-                    "Autók listázása",
-                    "Vásárlók listázása",
-                    "Utazások listázása",
-                },
-                [
-                    () => carSharingServie.ToList(carSharingServie.GetAllCars()),
-                    () => carSharingServie.ToList(carSharingServie.GetAllCustomers()),
-                    () => carSharingServie.ToList(carSharingServie.GetAllTrips())
-                ]
-                ),
-              () => DisplayMenu(
-                  new string[]{
-                      "Autók",
-                      "Vásárlók",
-                      "Utazások",
-                      "Lekérdezések",
-                      "Adatbázis törlése"
-                  },
-                  [
-                      () => DisplayMenu(new string[]
-                         {
-                          "Új autó felvétele",
-                          "Autó módosítása",
-                          "Autó törlése",
-                          "Autók törlése",
-                          "Autók exportálása",
-                          "Összes autó törlése",
-                         },
-                         [
-                             () => AddCarFromConsole(),
-                             () => UpdateCarFromConsole(),
-                             () => DeleteCarFromConsole(),
-                             () => carSharingServie.DeleteCars(),
-                             () => carSharingServie.CarsToExcel(),
-                             () => carSharingServie.DeleteAllCar(),
-                         ]
-                          ),
-
-                      () => DisplayMenu(new string[]
-                         {
-                          "Új vásárló felvétele",
-                          "Vásárló módosítása",
-                          "Vásárló törlése",
-                          "Vásárlók törlése",
-                          "Vásárlók exportálása",
-                          "Összes vásárló törlése",
-                         },
-                         [
-                             () => AddCustomerFromConsole(),
-                             () => UpdateCustomerFromConsole(),
-                             () => DeleteCustomerFromConsole(),
-                             () => carSharingServie.DeleteCustomers(),
-                             () => carSharingServie.CustomersToExcel(),
-                             () => carSharingServie.DeleteAllCustomer(),
-
-                         ]
-                          ),
-
-                      () => DisplayMenu(new string[]
-                         {
-                          "Új utazás",
-                          "Utazás módosítása",
-                          "Utazás törlése",
-                          "Utazások törlése",
-                          "Utazások exportálása",
-                          "Összes utazás törlése",
-                         },
-                         [
-                             () => AddTripFromConsole(),
-                             () => UpdateTripFromConsole(),
-                             () => DeleteTripFromConsole(),
-                             () => carSharingServie.DeleteTrips(),
-                             () => carSharingServie.TripsToExcel(),
-                             () => carSharingServie.DeleteAllTrip(),
-                         ]
-                          ),
-                           () => DisplayMenu(new string[]
-                      {
-                          "Legtöbbet futott jármű",
-                          "Top 10 legtöbbet fizető ügyfél",
-                          "Autók átlagos futása",
-                      },
-                      [
-                          () => carSharingServie.MostUsedCar(),
-                          () => carSharingServie.Top10MostPayingCustomer(),
-                          () => carSharingServie.AvgDistance(),
-                      ]),
-                      () => WipeDatabase(carSharingServie)
-                  ]
-               )
-            ]
-            );
         }
         static void DisplayMenu(string[] menus, Action[] actions)
         {
@@ -519,6 +509,7 @@ namespace IVCFB2_HSZF_2024251
                 y = 5;
             }
         }
+
         static void SeedDatabase(ICarSharingService carSharingService)
         {
             if (isDatabaseSeeded)

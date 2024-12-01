@@ -12,7 +12,7 @@ namespace IVCFB2_HSZF_2024251.Persistence.MsSql
         void UpdateTrip(Trip trip);
         void DeleteTrip(Trip trip);
 
-        void DeleteTrips();
+        //void DeleteTrips();
         void DeleteAllTrip();
     }
 }

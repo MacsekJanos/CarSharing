@@ -93,10 +93,10 @@ namespace IVCFB2_HSZF_2024251.Application
             return true;
         }
 
-        public void DeleteCars()
-        {
-            dataProvider.DeleteCars();
-        }
+        //public void DeleteCars()
+        //{
+        //    dataProvider.DeleteCars();
+        //}
         public void DeleteAllCar()
         {
             dataProvider.DeleteAllCar();
@@ -151,10 +151,10 @@ namespace IVCFB2_HSZF_2024251.Application
             return true;
         }
 
-        public void DeleteCustomers()
-        {
-            dataProvider.DeleteCustomers();
-        }
+        //public void DeleteCustomers()
+        //{
+        //    dataProvider.DeleteCustomers();
+        //}
 
         public void DeleteAllCustomer()
         {
@@ -227,10 +227,10 @@ namespace IVCFB2_HSZF_2024251.Application
             return true;
         }
 
-        public void DeleteTrips()
-        {
-            dataProvider.DeleteTrips();
-        }
+        //public void DeleteTrips()
+        //{
+        //    dataProvider.DeleteTrips();
+        //}
 
         public void DeleteAllTrip()
         {
